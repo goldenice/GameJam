@@ -4,8 +4,11 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
+import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import input.ShipKeyBoardListener;
 import java.util.Random;
@@ -31,10 +34,13 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {         
         this.flyCam.setEnabled(false);
+        
         ShipKeyBoardListener s = new ShipKeyBoardListener(this);
         testShip = new Ship(false, 0, 0, 0, 0);
         s.setShip(testShip);
         
+        
+
         
         Box b = new Box(1, 1, 1);
         geom = new Geometry("Box", b);
@@ -47,16 +53,19 @@ public class Main extends SimpleApplication {
         
         meteorFactory = new MeteorFactory(this);
         meteorFactory.generateMeteors();
+
+        
     }
 
     @Override
     public void simpleUpdate(float tpf) {
         this.testShip.step();
-        //geom.setLocalRotation(Quaternion.IDENTITY);
-        geom.setLocalRotation(this.cam.getRotation());
-        this.cam.getRotation().fromAngles(testShip.getAngles());
-        this.cam.getLocation().set(testShip.getLoc());
+
+        this.cam.lookAtDirection(this.testShip.getSpeeds(), new Vector3f(0, 1, 0));
+        
         this.cam.update();
+        geom.setLocalRotation(Quaternion.IDENTITY);
+        geom.rotate(this.cam.getRotation());
         
         //geom.rotate(this.cam.getRotation(), count/2, 0);
     }

@@ -3,7 +3,7 @@ package ship;
 import com.jme3.math.Vector3f;
 
 /**
- *
+ * 
  * @author Destion
  */
 public class Ship {
@@ -83,8 +83,13 @@ public class Ship {
         this.id = id;
     }
     
+    public void wPressed(){
+        this.angles[0] += 0.1f;
+    }
     
-    
+     public void sPressed(){
+        this.angles[0] -= 0.1f;
+    }
     
     //Weapon carries the 
     public class Weapon{

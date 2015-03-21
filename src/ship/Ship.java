@@ -2,6 +2,8 @@ package ship;
 
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import mygame.Main;
 /**
  * 
@@ -154,17 +156,17 @@ public class Ship {
         app.setNodeDir(0, 0, force * 0.04f);
     }
      
-    public int shoot(){
+    public void shoot(){
         Vector3f directionXYZ = app.getCamDir();
         Vector3f positionXYZ = app.getCamLoc();
         
         Ray ray = new Ray(directionXYZ, positionXYZ);
         
-        //TODO fill in the node for enemy ships
-        
-        
-        
-        return 0;
+        if (this.app.meteorFactory.doesCollide(ray)){
+            System.out.println("Lol");
+            this.app.meteorFactory.collideObject(ray).setCullHint(CullHint.Always);
+            System.out.println("Hoi");
+        }
     }
      
     public void hit(int damage){

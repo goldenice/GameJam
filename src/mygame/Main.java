@@ -97,7 +97,9 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         skbListener.step();
         this.testShip.step();
-        
+        if(meteorFactory.doesCollide(geom.getWorldBound())){
+            System.out.println("Collison!");
+        }
         node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed
         
         geom.setLocalRotation(Quaternion.IDENTITY);

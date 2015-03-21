@@ -15,20 +15,20 @@ import javax.vecmath.Vector3d;
  *
  * @author Gerryflap
  */
-public class Meteor {
-    private Vector3f position;
+public class Meteor extends GameObject{
     private Sphere sphere;
     private Material material;
     private Geometry geom;
     public static MeteorFactory meteorFactory;
     
-    Meteor(Vector3f pos, Sphere sphere, Material material, Node node){
-        position = pos;
+    Meteor(int id, Vector3f position, Vector3f direction, Sphere sphere, Material material, Node node){
+        super(id, position, direction);
         this.sphere = sphere;
         this.material = material;
         geom = new Geometry("Sphere", sphere);
         geom.setMaterial(material);
-        geom.move(pos.x, pos.y, pos.z);
+        geom.move(position.x, position.y, position.z);
+        geom.rotate(direction.x, direction.y, direction.z);
         node.attachChild(geom);
         
     }

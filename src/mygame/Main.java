@@ -76,7 +76,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(node);
         
         this.node.attachChild(geom);
-        cam.setFrustumFar(5000);
+        cam.setFrustumFar(3000);
         CameraNode camNode = new CameraNode("Camnode", cam);
         
         this.node.attachChild(camNode);        

@@ -13,6 +13,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.plugins.OBJLoader;
 import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import com.jme3.texture.Texture;
 import input.ShipKeyBoardListener;
@@ -35,7 +36,7 @@ public class Main extends SimpleApplication {
     Spatial player;
             
     public static void main(String[] args) {
-        Main app = new Main();
+        Main app = new Main();  
         
         app.setShowSettings(true);
         AppSettings settings = new AppSettings(true);
@@ -60,6 +61,16 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {         
         this.flyCam.setEnabled(false);
+        
+        Sphere planetSphere= new Sphere(20,20,800);
+        Geometry planetGeom = new Geometry("planet", planetSphere);
+        Material planetMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        planetMat.setColor("Color", ColorRGBA.Blue);
+        planetGeom.setMaterial(planetMat);
+        planetGeom.setCullHint(Spatial.CullHint.Never);
+        rootNode.attachChild(planetGeom);
+        planetGeom.move(new Vector3f(4000, -600, 0));
+        
         
         skbListener = new ShipKeyBoardListener(this);
         testShip = new Ship(0, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this);

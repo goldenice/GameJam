@@ -5,15 +5,13 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import mygame.Main;
+import objects.GameObject;
 /**
  * 
  * @author Destion
  */
-public class Ship {
+public class Ship extends GameObject{
     
-    private float x;
-    private float y;
-    private float z;
     
     private Main app;
     
@@ -37,7 +35,8 @@ public class Ship {
     
     
     
-    public Ship(boolean invert, float xpos, float ypos, float zpos, int shipId, Main app){
+    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, Main app){
+        super(id, position, direction);
         this.speeds = new Vector3f(0, 0, 0);
         if (invert) {
             this.inverted = -1;
@@ -45,10 +44,6 @@ public class Ship {
             this.inverted = 1;
         }
         this.angles = new float[]{0,0,0};
-        this.x = xpos;
-        this.y = ypos;
-        this.z = zpos;
-        this.id = shipId;
         this.health = 100;
         
         this.app = app;
@@ -57,17 +52,14 @@ public class Ship {
         
     }
     
-    public Ship(boolean invert, float xpos, float ypos, float zpos, int shipId, int seperation, int firePower, int reloadTime, int ammo, Main app){
+    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, int seperation, int firePower, int reloadTime, int ammo, Main app){
+        super(id, position, direction);
         if (invert) {
             this.inverted = -1;
         } else {
             this.inverted = 1;
         }
         this.angles = new float[]{0, 0, 0};
-        this.x = xpos;
-        this.y = ypos;
-        this.z = zpos;
-        this.id = shipId;
         this.health = 100;
         
         this.app = app;
@@ -77,21 +69,18 @@ public class Ship {
     
     //Getters for position and speed
     public float getX(){
-        return this.x;
+        return this.position.x;
     }
     public float getY(){
-        return this.y;
+        return this.position.y;
     }
     public float getZ(){
-        return this.z;
+        return this.position.z;
     }
     
     public Vector3f getLoc(){
-        Vector3f loc = new Vector3f();
-        loc.x = this.x;
-        loc.y = this.y;
-        loc.z = this.z;        
-        return loc;
+        //This is here for backwards compability
+        return getPosition();
     }
     
     public float[] getAngles(){
@@ -109,9 +98,7 @@ public class Ship {
         this.speeds.y = (float) (SPEED * (Math.cos(this.angles[0]) * Math.sin(this.angles[2])));
         this.speeds.z = (float) (SPEED * (Math.cos(this.angles[1]) * Math.sin(this.angles[0])));
         
-        this.x += this.speeds.x;
-        this.y += this.speeds.y;
-        this.z += this.speeds.z;
+        this.position.add(this.speeds);
         //System.out.println(String.format("x: %s, y: %s, z: %s", angles[0], angles[1], angles[2]));
         //System.out.println(String.format("x: %s, y: %s, z: %s", Math.sin(this.angles[2]) * Math.cos(this.angles[1]) , Math.sin(this.angles[0]) * Math.cos(this.angles[2]), Math.sin(this.angles[1]) * Math.cos(this.angles[0])));
 
@@ -128,13 +115,13 @@ public class Ship {
     
     //Setters for position, identification number and speedc
     public void setX(float x){
-        this.x =x;
+        this.position.x =x;
     }
     public void setY(float y){
-        this.y = y;
+        this.position.y = y;
     }
     public void setZ(float z){
-        this.z = z;
+        this.position.z = z;
     }
     public void setId(int id){
         this.id = id;

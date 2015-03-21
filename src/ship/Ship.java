@@ -14,7 +14,11 @@ public class Ship {
     
     private float[] angles;
     
-    private int id;   
+    private int id; 
+    
+    private final int DEFAULTFIREPOWER = 50;
+    private final int DEFAULTRELOADTIME = 3000;
+    private final int DEFAULTAMMO = 8;
     
     
     //Invert the4 directions the ship takes on W or S presses
@@ -24,7 +28,23 @@ public class Ship {
     
     private final float SPEED = 80;
     
-    public Ship(float xpos, float ypos, float zpos, int shipId, int reload, int firePower){
+    
+    
+    public Ship(boolean invert, float xpos, float ypos, float zpos, int shipId){
+        this.inverted = invert;
+        this.angles = new float[]{0,0,0};
+        this.x = xpos;
+        this.y = ypos;
+        this.z = zpos;
+        this.id = shipId;
+        this.health = 100;
+        
+        Weapon weapon = new Weapon(500, this.DEFAULTFIREPOWER, this.DEFAULTRELOADTIME, this.DEFAULTAMMO );
+        
+    }
+    
+    public Ship(boolean invert, float xpos, float ypos, float zpos, int shipId, int seperation, int firePower, int reloadTime, int ammo){
+        this.inverted = invert;
         this.angles = new float[]{0, 0, 0};
         this.x = xpos;
         this.y = ypos;
@@ -32,7 +52,7 @@ public class Ship {
         this.id = shipId;
         this.health = 100;
         
-        Weapon weapon = new Weapon(reload, firePower);
+        Weapon weapon = new Weapon(seperation, firePower, reloadTime, ammo);
     }
     
     //Getters for position and speed
@@ -84,40 +104,72 @@ public class Ship {
     }
     
     public void wPressed(){
-        this.angles[0] += 0.1f;
+        if (this.inverted){
+            this.angles[0] -= 0.1f;
+        } else{
+            this.angles[0] += 0.1f;
+        } 
     }
     
      public void sPressed(){
-        this.angles[0] -= 0.1f;
+        if (this.inverted){
+            this.angles[0] += 0.1f;
+        } else{
+            this.angles[0] -= 0.1f;            
+        }        
     }
-    
-    //Weapon carries the 
+     
+     public void hit(int damage){
+         this.health -= damage;
+     }     
+     
+    //Weapon carries the reloadtime and damage of the weapon this ship is carrying, enabling multiple types of ship
     public class Weapon{
         
-        int reloadTime;
+        int seperation;
         int firePower;
+        int reloadTime;
+        int ammunition;
         
         long lastFire;
+        long reloadStart;
         boolean canFire;
+        boolean reloading;
         
-        public Weapon(int reloadTime, int firePower){
-            this.reloadTime = reloadTime;
+        public Weapon(int reloadTime, int firePower, int seperation, int ammunition){
+            this.reloading = false;
+            this.seperation = seperation;
             this.firePower = firePower;
             this.canFire = true;
+            this.reloadTime = reloadTime;
+            this.ammunition = ammunition;
         }
 
             //Use fire when firing a bullet, canFire checks reloadtime
         public void canFire(){
-            if ((System.currentTimeMillis() - this.lastFire) > this.reloadTime){
-                this.canFire = true;
-            } else {
+            if ((System.currentTimeMillis() - this.reloadStart) > this.reloadTime){
+                this.reloadStart = 0;
+                this.reloading = false;
+            }  
+            
+            if (reloading){
                 this.canFire = false;
+            } else {            
+                if ((System.currentTimeMillis() - this.lastFire) > this.seperation){
+                    this.canFire = true;
+                } else {
+                    this.canFire = false;
+                }
             }
         }
         public boolean fire(){
             this.canFire();
             if (canFire){
                 this.lastFire = System.currentTimeMillis();
+            }
+            this.ammunition -= 1;
+            if (this.ammunition <= 0){
+                this.reloading = true;
             }
             return this.canFire;
         }

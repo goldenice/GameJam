@@ -91,7 +91,7 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         this.testShip.step();
         
-        node.move(new Vector3f(0, 0, (float) 0.05 ));
+        node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(0.1f, 0.1f, 0.1f))); // 0.1 = speed
         
         geom.setLocalRotation(Quaternion.IDENTITY);
         //geom.rotate(this.cam.getRotation());

@@ -143,6 +143,14 @@ public class Ship {
     public void sPressed(){
         app.setNodeDir(-1 * (inverted * 0.03f), 0, 0);        
     }
+    
+    public void aPressed() {
+        app.setNodeDir(0, 0, -1 * 0.03f);
+    }
+    
+    public void dPressed() {
+        app.setNodeDir(0, 0, 0.03f);
+    }
      
     public int shoot(){
         Vector3f directionXYZ = app.getCamDir();

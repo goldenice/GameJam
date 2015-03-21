@@ -31,6 +31,18 @@ public class Main extends SimpleApplication {
    
     public static void main(String[] args) {
         Main app = new Main();
+        
+        app.setShowSettings(true);
+        AppSettings settings = new AppSettings(true);
+        settings.setTitle("Space Vector");
+        
+        settings.setSettingsDialogImage("Project_Assets/breen-starships.jpg");
+        
+        app.setDisplayStatView(false);
+        app.setDisplayFps(false);
+        app.setSettings(settings);
+        
+        
         app.start();
     }
 

@@ -15,14 +15,6 @@ public class tempstorage {
     //Stores code to enable github to function
     
   
-    /*app.setShowSettings(true);
-        AppSettings settings = new AppSettings(true);
-        settings.setTitle("Space Vector");
-        
-        settings.setSettingsDialogImage("Project_Assets/breen-starships.jpg");
-        
-        app.setDisplayStatView(false);
-        app.setDisplayFps(false);
-        app.setSettings(settings);
+    /*
     */
 }

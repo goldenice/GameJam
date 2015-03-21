@@ -21,7 +21,7 @@ public class MeteorFactory {
     private ArrayList<Meteor> meteors;
     private Node node;
     private Main app;
-    public static final int METEOR_NUM = 100;
+    public static final int METEOR_NUM = 1000;
     public static final float CREATION_SCALE = 100;
 
     
@@ -36,8 +36,10 @@ public class MeteorFactory {
     public void generateMeteors(){
         Vector3f pos = new Vector3f(0f, 0f, 0f);
         Sphere sphere;
+        
+        
         Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Yellow);
+        mat.setTexture("ColorMap", this.app.getAssetManager().loadTexture("./Project_Assets/meteor.png"));
         
         Random random = new Random();
         for(int i = 0; i < METEOR_NUM; i++){

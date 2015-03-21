@@ -26,7 +26,7 @@ public class Ship {
     
     private int health;
     
-    private final float SPEED = 80;
+    private final float SPEED = 0.00 8f;
     
     
     
@@ -81,6 +81,12 @@ public class Ship {
     
     public float getSpeed(){
         return this.SPEED;
+    }
+    
+    public void step(){
+        this.x += SPEED * (Math.sin(this.angles[0]) + Math.cos(this.angles[0]));
+        this.y += SPEED * (Math.sin(this.angles[1]) + Math.cos(this.angles[1]));
+        this.z += SPEED * (Math.sin(this.angles[2]) + Math.cos(this.angles[2]));
     }
     
     //Getter for identification number

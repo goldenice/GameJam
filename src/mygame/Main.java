@@ -32,7 +32,7 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {         
         this.flyCam.setEnabled(false);
         ShipKeyBoardListener s = new ShipKeyBoardListener(this);
-        testShip = new Ship(0, 0, 0, 0, 1000, 1);
+        testShip = new Ship(false, 0, 0, 0, 0);
         s.setShip(testShip);
         
         
@@ -51,6 +51,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
+        this.testShip.step();
         //geom.setLocalRotation(Quaternion.IDENTITY);
         geom.setLocalRotation(this.cam.getRotation());
         this.cam.getRotation().fromAngles(testShip.getAngles());

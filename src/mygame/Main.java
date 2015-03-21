@@ -28,7 +28,8 @@ public class Main extends SimpleApplication {
     Ship testShip;
     CameraNode camNode;
     Node node;
-   
+    ShipKeyBoardListener skbListener;
+            
     public static void main(String[] args) {
         Main app = new Main();
         
@@ -56,9 +57,9 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {         
         this.flyCam.setEnabled(false);
         
-        ShipKeyBoardListener s = new ShipKeyBoardListener(this);
+        skbListener = new ShipKeyBoardListener(this);
         testShip = new Ship(false, 0, 0, 0, 0, this);
-        s.setShip(testShip);
+        skbListener.setShip(testShip);
         
         
 
@@ -82,7 +83,7 @@ public class Main extends SimpleApplication {
         this.node.attachChild(camNode);        
       
         
-        camNode.setLocalTranslation(new Vector3f(0, 0, -5));
+        camNode.setLocalTranslation(new Vector3f(0, 0, -25));
         
         
         camNode.lookAt(geom.getLocalTranslation(), Vector3f.UNIT_Y);
@@ -95,6 +96,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
+        skbListener.step();
         this.testShip.step();
         
         node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(0.1f, 0.1f, 0.1f))); // 0.1 = speed

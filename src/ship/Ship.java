@@ -12,6 +12,8 @@ public class Ship {
     private float y;
     private float z;
     
+    private Vector3f speeds;
+    
     private float[] angles;
     
     private int id; 
@@ -31,6 +33,7 @@ public class Ship {
     
     
     public Ship(boolean invert, float xpos, float ypos, float zpos, int shipId){
+        this.speeds = new Vector3f(0, 0, 0);
         this.inverted = invert;
         this.angles = new float[]{0,0,0};
         this.x = xpos;
@@ -84,9 +87,15 @@ public class Ship {
     }
     
     public void step(){
-        this.x += SPEED * (Math.sin(this.angles[0]) + Math.cos(this.angles[0]));
-        this.y += SPEED * (Math.sin(this.angles[1]) + Math.cos(this.angles[1]));
-        this.z += SPEED * (Math.sin(this.angles[2]) + Math.cos(this.angles[2]));
+        this.speeds.x = (float) (SPEED * (Math.cos(this.angles[2]) * -Math.sin(this.angles[1])));
+        this.speeds.y = (float) (SPEED * (Math.cos(this.angles[0]) * Math.sin(this.angles[2])));
+        this.speeds.z = (float) (SPEED * (Math.cos(this.angles[1]) * Math.sin(this.angles[0])));
+        
+        this.x += this.speeds.x;
+        this.y += this.speeds.y;
+        this.z += this.speeds.z;
+        System.out.println(String.format("x: %s, y: %s, z: %s", angles[0], angles[1], angles[2]));
+        System.out.println(String.format("x: %s, y: %s, z: %s", Math.sin(this.angles[2]) * Math.cos(this.angles[1]) , Math.sin(this.angles[0]) * Math.cos(this.angles[2]), Math.sin(this.angles[1]) * Math.cos(this.angles[0])));
     }
     
     //Getter for identification number
@@ -94,6 +103,9 @@ public class Ship {
         return this.id;
     }
     
+    public Vector3f getSpeeds(){
+        return this.speeds;
+    }
     
     //Setters for position, identification number and speedc
     public void setX(float x){

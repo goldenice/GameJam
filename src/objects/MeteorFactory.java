@@ -21,8 +21,8 @@ public class MeteorFactory {
     private ArrayList<Meteor> meteors;
     private Node node;
     private Main app;
-    public static final int METEOR_NUM = 1000;
-    public static final float CREATION_SCALE = 100;
+    public static final int METEOR_NUM = 10000;
+    public static final float CREATION_SCALE = 3000;
 
     
     public MeteorFactory(Main app){
@@ -46,8 +46,7 @@ public class MeteorFactory {
             pos.x = random.nextFloat()*2*CREATION_SCALE-CREATION_SCALE;
             pos.y = random.nextFloat()*2*CREATION_SCALE-CREATION_SCALE;
             pos.z = random.nextFloat()*2*CREATION_SCALE-CREATION_SCALE;
-            sphere = new Sphere(16, 16, 1);
-            sphere.radius = 10;
+            sphere = new Sphere(16, 16, random.nextFloat()*10 + 3f);
             meteors.add(new Meteor(pos, sphere, mat, node));
         }
         app.getRootNode().attachChild(node);

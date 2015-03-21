@@ -138,20 +138,20 @@ public class Ship {
         this.id = id;
     }
     
-    public void wPressed(){
-        app.setNodeDir(inverted * 0.03f, 0, 0);
+    public void wPressed(float force){
+        app.setNodeDir(force * inverted * 0.03f, 0, 0);
     }
     
-    public void sPressed(){
-        app.setNodeDir(-1 * (inverted * 0.03f), 0, 0);        
+    public void sPressed(float force){
+        app.setNodeDir(force * -1 * (inverted * 0.03f), 0, 0);        
     }
     
-    public void aPressed() {
-        app.setNodeDir(0, 0, -1 * 0.03f);
+    public void aPressed(float force) {
+        app.setNodeDir(0, 0, force * -1 * 0.03f);
     }
     
-    public void dPressed() {
-        app.setNodeDir(0, 0, 0.03f);
+    public void dPressed(float force) {
+        app.setNodeDir(0, 0, force * 0.03f);
     }
      
     public int shoot(){

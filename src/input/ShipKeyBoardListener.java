@@ -16,6 +16,12 @@ import ship.Ship;
  */
 public class ShipKeyBoardListener implements ActionListener{
    private Ship ship;
+   
+   private int tiltForwardForce = 0;
+   private int tiltBackwardForce = 0;
+   private int rollLeftForce = 0;
+   private int rollRightForce = 0;
+   
    private boolean tiltForward;
    private boolean tiltBackward;
    private boolean rollLeft;
@@ -53,11 +59,40 @@ public class ShipKeyBoardListener implements ActionListener{
         }
     }
     
-    public void step(){
-        if (tiltForward) this.ship.wPressed(); 
-        if (tiltBackward) this.ship.sPressed();
-        if (rollLeft) this.ship.aPressed();
-        if (rollRight) this.ship.dPressed();
+    public void step() {
+        adjustForces()
+        this.ship.wPressed(force(tiltForwardForce));
+        this.ship.sPressed(force(tiltBackwardForce));
+        this.ship.aPressed(force(rollLeftForce));
+        this.ship.dPressed(force(rollRightForce));
+    }
+    
+    public void adjustForces() {
+        if (tiltForward) {
+            tiltForwardForce = Math.min(20, tiltForwardForce + 1);
+        } else {
+            tiltForwardForce = Math.max(0, tiltForwardForce - 2);
+        }
+        if (tiltBackward) {
+            tiltBackwardForce = Math.min(20, tiltBackwardForce + 1);
+        } else {
+            tiltBackwardForce = Math.max(0, tiltBackwardForce - 2);
+        }
+        if (rollLeft) {
+            rollLeftForce = Math.min(20, rollLeftForce + 1);
+        } else {
+            rollLeftForce = Math.max(0, rollLeftForce - 2);
+        }
+        if (rollRight) {
+            rollRightForce = Math.min(20, rollRightForce + 1);
+        } else {
+            rollRightForce = Math.max(0, rollRightForce - 2);
+        }
+    }
+    
+    private float force(int frame) {
+        if (frame / 20.0 > 0.78) return 1.0f;
+        return (float) Math.sin((double) (frame / 20.0));
     }
     
 }

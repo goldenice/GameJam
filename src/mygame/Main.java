@@ -68,7 +68,7 @@ public class Main extends SimpleApplication {
         geom = new Geometry("Box", b);
 
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
+        mat.setColor("Color", ColorRGBA.LightGray);
         geom.setMaterial(mat);
 
         this.node = new Node();
@@ -76,9 +76,8 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(node);
         
         this.node.attachChild(geom);
+        cam.setFrustumFar(5000);
         CameraNode camNode = new CameraNode("Camnode", cam);
-        
-        
         
         this.node.attachChild(camNode);        
       
@@ -99,12 +98,9 @@ public class Main extends SimpleApplication {
         skbListener.step();
         this.testShip.step();
         
-        node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(1f, 1f, 1f))); // 0.1 = speed
+        node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed
         
         geom.setLocalRotation(Quaternion.IDENTITY);
-        //geom.rotate(this.cam.getRotation());
-        
-        //geom.rotate(this.cam.getRotation(), count/2, 0);
     }
 
     @Override

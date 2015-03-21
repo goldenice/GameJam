@@ -63,6 +63,7 @@ public class Main extends SimpleApplication {
         
         this.node.attachChild(camNode);        
       
+        
         camNode.setLocalTranslation(new Vector3f(0, 5, -5));
         
         
@@ -81,7 +82,7 @@ public class Main extends SimpleApplication {
         node.move(new Vector3f(0, (float) -0.05 , (float) 0.05 ));
         
         geom.setLocalRotation(Quaternion.IDENTITY);
-        geom.rotate(this.cam.getRotation());
+        //geom.rotate(this.cam.getRotation());
         
         //geom.rotate(this.cam.getRotation(), count/2, 0);
     }
@@ -99,6 +100,7 @@ public class Main extends SimpleApplication {
         return this.cam.getLocation();
     }
     
-    public void setCamDir(float x, float y, float z){
-        this.node.move(x, y, z);    }
+    public void setNodeDir(float x, float y, float z){
+        node.rotate( 0.1f , 0, 0);
+    }
 }

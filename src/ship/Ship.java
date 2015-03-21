@@ -101,8 +101,8 @@ public class Ship {
         this.x += this.speeds.x;
         this.y += this.speeds.y;
         this.z += this.speeds.z;
-        System.out.println(String.format("x: %s, y: %s, z: %s", angles[0], angles[1], angles[2]));
-        System.out.println(String.format("x: %s, y: %s, z: %s", Math.sin(this.angles[2]) * Math.cos(this.angles[1]) , Math.sin(this.angles[0]) * Math.cos(this.angles[2]), Math.sin(this.angles[1]) * Math.cos(this.angles[0])));
+        //System.out.println(String.format("x: %s, y: %s, z: %s", angles[0], angles[1], angles[2]));
+        //System.out.println(String.format("x: %s, y: %s, z: %s", Math.sin(this.angles[2]) * Math.cos(this.angles[1]) , Math.sin(this.angles[0]) * Math.cos(this.angles[2]), Math.sin(this.angles[1]) * Math.cos(this.angles[0])));
     }
     
     //Getter for identification number
@@ -131,20 +131,20 @@ public class Ship {
     public void wPressed(){
         Vector3f camDirXYZ = this.app.getCamDir();
         if (this.inverted){
-            app.setCamDir(camDirXYZ.x, camDirXYZ.y + 0.1f, camDirXYZ.z);
+            app.setNodeDir(camDirXYZ.x, camDirXYZ.y + 0.1f, camDirXYZ.z);
         } else{
             
-            app.setCamDir(camDirXYZ.x, camDirXYZ.y - 0.1f, camDirXYZ.z);
+            app.setNodeDir(camDirXYZ.x, camDirXYZ.y - 0.1f, camDirXYZ.z);
         }  
     }
     
     public void sPressed(){
         Vector3f camDirXYZ = this.app.getCamDir();
         if (this.inverted){
-            app.setCamDir(camDirXYZ.x, (float) (camDirXYZ.y - 0.1), camDirXYZ.z);
+            app.setNodeDir(camDirXYZ.x, (float) (camDirXYZ.y - 0.1), camDirXYZ.z);
         } else{
             
-            app.setCamDir(camDirXYZ.x, (float) (camDirXYZ.y + 0.1), camDirXYZ.z);
+            app.setNodeDir(camDirXYZ.x, (float) (camDirXYZ.y + 0.1), camDirXYZ.z);
         }        
     }
      

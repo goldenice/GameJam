@@ -60,7 +60,7 @@ public class ShipKeyBoardListener implements ActionListener{
     }
     
     public void step() {
-        adjustForces()
+        adjustForces();
         this.ship.wPressed(force(tiltForwardForce));
         this.ship.sPressed(force(tiltBackwardForce));
         this.ship.aPressed(force(rollLeftForce));

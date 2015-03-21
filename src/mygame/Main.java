@@ -101,6 +101,6 @@ public class Main extends SimpleApplication {
     }
     
     public void setNodeDir(float x, float y, float z){
-        node.rotate( 0.1f , 0, 0);
+        node.rotate( x , y , z );
     }
 }

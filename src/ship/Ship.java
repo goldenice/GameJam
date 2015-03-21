@@ -27,7 +27,7 @@ public class Ship {
     
     
     //Invert the4 directions the ship takes on W or S presses
-    private boolean inverted;
+    private int inverted;
     
     private int health;
     
@@ -37,7 +37,11 @@ public class Ship {
     
     public Ship(boolean invert, float xpos, float ypos, float zpos, int shipId, Main app){
         this.speeds = new Vector3f(0, 0, 0);
-        this.inverted = invert;
+        if (invert) {
+            this.inverted = -1;
+        } else {
+            this.inverted = 1;
+        }
         this.angles = new float[]{0,0,0};
         this.x = xpos;
         this.y = ypos;
@@ -52,7 +56,11 @@ public class Ship {
     }
     
     public Ship(boolean invert, float xpos, float ypos, float zpos, int shipId, int seperation, int firePower, int reloadTime, int ammo, Main app){
-        this.inverted = invert;
+        if (invert) {
+            this.inverted = -1;
+        } else {
+            this.inverted = 1;
+        }
         this.angles = new float[]{0, 0, 0};
         this.x = xpos;
         this.y = ypos;
@@ -129,23 +137,11 @@ public class Ship {
     }
     
     public void wPressed(){
-        Vector3f camDirXYZ = this.app.getCamDir();
-        if (this.inverted){
-            app.setNodeDir(camDirXYZ.x, camDirXYZ.y + 0.1f, camDirXYZ.z);
-        } else{
-            
-            app.setNodeDir(camDirXYZ.x, camDirXYZ.y - 0.1f, camDirXYZ.z);
-        }  
+        app.setNodeDir(inverted * 0.03f, 0, 0);
     }
     
     public void sPressed(){
-        Vector3f camDirXYZ = this.app.getCamDir();
-        if (this.inverted){
-            app.setNodeDir(camDirXYZ.x, (float) (camDirXYZ.y - 0.1), camDirXYZ.z);
-        } else{
-            
-            app.setNodeDir(camDirXYZ.x, (float) (camDirXYZ.y + 0.1), camDirXYZ.z);
-        }        
+        app.setNodeDir(-1 * (inverted * 0.03f), 0, 0);        
     }
      
     public int shoot(){

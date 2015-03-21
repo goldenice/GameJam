@@ -56,8 +56,8 @@ public class ShipKeyBoardListener implements ActionListener{
     public void step(){
         if (tiltForward) this.ship.wPressed(); 
         if (tiltBackward) this.ship.sPressed();
-        if (rollLeft) this.ship.sPressed();
-        if (rollRight) this.ship.sPressed();
+        if (rollLeft) this.ship.aPressed();
+        if (rollRight) this.ship.dPressed();
     }
     
 }

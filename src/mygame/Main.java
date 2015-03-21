@@ -25,13 +25,14 @@ import ship.Ship;
  * @author normenhansen
  */
 public class Main extends SimpleApplication {
-    MeteorFactory meteorFactory;
+    public MeteorFactory meteorFactory;
     Geometry geom;
     float count;
     Ship testShip;
     CameraNode camNode;
     Node node;
     ShipKeyBoardListener skbListener;
+    Spatial player;
             
     public static void main(String[] args) {
         Main app = new Main();
@@ -65,14 +66,14 @@ public class Main extends SimpleApplication {
         skbListener.setShip(testShip);
         
         
-        Spatial player = assetManager.loadModel("Project_Assets/ship.obj");
+        this.player = assetManager.loadModel("Project_Assets/ship.obj");
         
-        //Box b = new Box(1, 1, 1);
-        //geom = new Geometry("Box", b);
+        Box b = new Box(1, 1, 1);
+        geom = new Geometry("Box", b);
 
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.LightGray);
-        //geom.setMaterial(mat);
+        geom.setMaterial(mat);
         
         player.setMaterial(mat);
         
@@ -87,7 +88,7 @@ public class Main extends SimpleApplication {
         this.node.attachChild(camNode);        
       
         
-        camNode.setLocalTranslation(new Vector3f(0, 5, -50));
+        camNode.setLocalTranslation(new Vector3f(0, 0, -50));
         
         
         //camNode.lookAt(geom.getLocalTranslation(), Vector3f.UNIT_Y);
@@ -102,8 +103,8 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         skbListener.step();
         this.testShip.step();
-        if(meteorFactory.doesCollide(geom.getWorldBound())){
-            System.out.println("Collison!");
+        if(meteorFactory.doesCollide(this.player.getWorldBound())){
+            System.out.println("Collision");
         }
         node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed
         

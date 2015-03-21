@@ -5,10 +5,12 @@
 package objects;
 
 import com.jme3.collision.Collidable;
+import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
@@ -64,6 +66,17 @@ public class MeteorFactory {
         CollisionResults colRes = new CollisionResults();
         this.node.collideWith(object, colRes);
         return colRes.size() != 0;        
+    }
+    
+    public Geometry collideObject(Collidable object){
+        CollisionResults colRes = new CollisionResults();
+        this.node.collideWith(object, colRes);
+        for (CollisionResult res : colRes){
+            if (res.getContactPoint() != null){
+                return res.getGeometry();
+            }
+        }
+        return null;
     }
     
     public Node getNode(){

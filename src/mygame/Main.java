@@ -10,6 +10,7 @@ import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
+import com.jme3.system.AppSettings;
 import input.ShipKeyBoardListener;
 import java.util.Random;
 import objects.MeteorFactory;
@@ -36,7 +37,7 @@ public class Main extends SimpleApplication {
         this.flyCam.setEnabled(false);
         
         ShipKeyBoardListener s = new ShipKeyBoardListener(this);
-        testShip = new Ship(false, 0, 0, 0, 0);
+        testShip = new Ship(false, 0, 0, 0, 0, this);
         s.setShip(testShip);
         
         
@@ -73,5 +74,13 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleRender(RenderManager rm) {
         //TODO: add render code
+    }
+    
+    public Vector3f getCamDir(){
+        return this.cam.getDirection();
+    }
+    
+    public Vector3f getCamLoc(){
+        return this.cam.getLocation();
     }
 }

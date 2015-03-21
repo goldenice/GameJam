@@ -147,11 +147,11 @@ public class Ship {
     }
     
     public void aPressed(float force) {
-        app.setNodeDir(0, 0, force * -1 * 0.03f);
+        app.setNodeDir(0, 0, force * -1 * 0.04f);
     }
     
     public void dPressed(float force) {
-        app.setNodeDir(0, 0, force * 0.03f);
+        app.setNodeDir(0, 0, force * 0.04f);
     }
      
     public int shoot(){

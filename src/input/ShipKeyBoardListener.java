@@ -79,12 +79,12 @@ public class ShipKeyBoardListener implements ActionListener{
             tiltBackwardForce = Math.max(0, tiltBackwardForce - 2);
         }
         if (rollLeft) {
-            rollLeftForce = Math.min(20, rollLeftForce + 1);
+            rollLeftForce = Math.min(20, rollLeftForce + 2);
         } else {
             rollLeftForce = Math.max(0, rollLeftForce - 2);
         }
         if (rollRight) {
-            rollRightForce = Math.min(20, rollRightForce + 1);
+            rollRightForce = Math.min(20, rollRightForce + 2);
         } else {
             rollRightForce = Math.max(0, rollRightForce - 2);
         }

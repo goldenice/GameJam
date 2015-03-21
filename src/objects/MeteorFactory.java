@@ -46,7 +46,7 @@ public class MeteorFactory {
             pos.x = random.nextFloat()*2*CREATION_SCALE-CREATION_SCALE;
             pos.y = random.nextFloat()*2*CREATION_SCALE-CREATION_SCALE;
             pos.z = random.nextFloat()*2*CREATION_SCALE-CREATION_SCALE;
-            sphere = new Sphere(16, 16, random.nextFloat()*10 + 3f);
+            sphere = new Sphere(16, 16, random.nextFloat()*30 + 3f);
             meteors.add(new Meteor(pos, sphere, mat, node));
         }
         app.getRootNode().attachChild(node);

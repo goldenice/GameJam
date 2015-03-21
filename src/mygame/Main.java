@@ -42,6 +42,12 @@ public class Main extends SimpleApplication {
         app.setDisplayFps(false);
         app.setSettings(settings);
         
+        settings.setFullscreen(true);
+        
+        settings.setVSync(true);
+        settings.setResolution(1024, 720);
+        
+      
         
         app.start();
     }

@@ -99,7 +99,7 @@ public class Main extends SimpleApplication {
         skbListener.step();
         this.testShip.step();
         
-        node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(0.1f, 0.1f, 0.1f))); // 0.1 = speed
+        node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(1f, 1f, 1f))); // 0.1 = speed
         
         geom.setLocalRotation(Quaternion.IDENTITY);
         //geom.rotate(this.cam.getRotation());

@@ -36,6 +36,7 @@ public class Ship {
     
     
     public Ship(boolean invert, float xpos, float ypos, float zpos, int shipId, Main app){
+        this.speeds = new Vector3f(0, 0, 0);
         this.inverted = invert;
         this.angles = new float[]{0,0,0};
         this.x = xpos;

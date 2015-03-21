@@ -129,18 +129,22 @@ public class Ship {
     }
     
     public void wPressed(){
+        Vector3f camDirXYZ = this.app.getCamDir();
         if (this.inverted){
-            this.angles[0] -= 0.1f;
+            app.setCamDir(camDirXYZ.x, camDirXYZ.y + 0.1f, camDirXYZ.z);
         } else{
-            this.angles[0] += 0.1f;
-        } 
+            
+            app.setCamDir(camDirXYZ.x, camDirXYZ.y - 0.1f, camDirXYZ.z);
+        }  
     }
     
     public void sPressed(){
+        Vector3f camDirXYZ = this.app.getCamDir();
         if (this.inverted){
-            this.angles[0] += 0.1f;
+            app.setCamDir(camDirXYZ.x, (float) (camDirXYZ.y - 0.1), camDirXYZ.z);
         } else{
-            this.angles[0] -= 0.1f;            
+            
+            app.setCamDir(camDirXYZ.x, (float) (camDirXYZ.y + 0.1), camDirXYZ.z);
         }        
     }
      

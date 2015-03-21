@@ -9,6 +9,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 import input.ShipKeyBoardListener;
@@ -25,7 +26,8 @@ public class Main extends SimpleApplication {
     Geometry geom;
     float count;
     Ship testShip;
-    
+    CameraNode camNode;
+    Node node;
    
     public static void main(String[] args) {
         Main app = new Main();
@@ -50,8 +52,22 @@ public class Main extends SimpleApplication {
         mat.setColor("Color", ColorRGBA.Blue);
         geom.setMaterial(mat);
 
-        rootNode.attachChild(geom);
+        this.node = new Node();
         
+        rootNode.attachChild(node);
+        
+        this.node.attachChild(geom);
+        CameraNode camNode = new CameraNode("Camnode", cam);
+        
+        
+        
+        this.node.attachChild(camNode);        
+      
+        camNode.setLocalTranslation(new Vector3f(0, 5, -5));
+        
+        
+        camNode.lookAt(geom.getLocalTranslation(), Vector3f.UNIT_Y);
+        camNode.setControlDir(ControlDirection.SpatialToCamera);
         meteorFactory = new MeteorFactory(this);
         meteorFactory.generateMeteors();
 
@@ -61,10 +77,9 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         this.testShip.step();
-
-        this.cam.lookAtDirection(this.testShip.getSpeeds(), new Vector3f(0, 1, 0));
         
-        this.cam.update();
+        node.move(new Vector3f(0, (float) -0.05 , (float) 0.05 ));
+        
         geom.setLocalRotation(Quaternion.IDENTITY);
         geom.rotate(this.cam.getRotation());
         
@@ -83,4 +98,7 @@ public class Main extends SimpleApplication {
     public Vector3f getCamLoc(){
         return this.cam.getLocation();
     }
+    
+    public void setCamDir(float x, float y, float z){
+        this.node.move(x, y, z);    }
 }

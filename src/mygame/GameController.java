@@ -5,6 +5,9 @@
 package mygame;
 
 import input.ShipKeyBoardListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import objects.GameObject;
 import ship.Ship;
 
 /**
@@ -12,14 +15,17 @@ import ship.Ship;
  * @author Gerryflap
  */
 public class GameController {
-    private Ship thisShip;
     private Main app;
-    private ShipKeyBoardListener shipKeyBoardListener;
-    //public static final int nee = 1;
+    private HashMap<Integer, GameObject> objects;
     
     public GameController(Main app){
         this.app = app;
-        this.shipKeyBoardListener = new ShipKeyBoardListener(app);
-        this.shipKeyBoardListener.setShip(thisShip);
+        this.objects = new HashMap<Integer, GameObject>();
     }
+    
+    private GameObject getById(int id){
+        return objects.get(id);
+    }
+    
+    
 }

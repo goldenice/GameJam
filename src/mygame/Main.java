@@ -64,7 +64,7 @@ public class Main extends SimpleApplication {
         this.node.attachChild(camNode);        
       
         
-        camNode.setLocalTranslation(new Vector3f(0, 5, -5));
+        camNode.setLocalTranslation(new Vector3f(0, 0, -5));
         
         
         camNode.lookAt(geom.getLocalTranslation(), Vector3f.UNIT_Y);
@@ -79,7 +79,7 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         this.testShip.step();
         
-        node.move(new Vector3f(0, (float) -0.05 , (float) 0.05 ));
+        node.move(new Vector3f(0, 0, (float) 0.05 ));
         
         geom.setLocalRotation(Quaternion.IDENTITY);
         //geom.rotate(this.cam.getRotation());

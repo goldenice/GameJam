@@ -9,6 +9,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
@@ -62,30 +63,32 @@ public class Main extends SimpleApplication {
         skbListener.setShip(testShip);
         
         
-
+        Spatial player = assetManager.loadModel("Project_Assets/ship.obj");
         
-        Box b = new Box(1, 1, 1);
-        geom = new Geometry("Box", b);
+        //Box b = new Box(1, 1, 1);
+        //geom = new Geometry("Box", b);
 
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.LightGray);
-        geom.setMaterial(mat);
-
+        //geom.setMaterial(mat);
+        
+        player.setMaterial(mat);
+        
         this.node = new Node();
         
         rootNode.attachChild(node);
         
-        this.node.attachChild(geom);
+        this.node.attachChild(player);
         cam.setFrustumFar(3000);
         CameraNode camNode = new CameraNode("Camnode", cam);
         
         this.node.attachChild(camNode);        
       
         
-        camNode.setLocalTranslation(new Vector3f(0, 0, -25));
+        camNode.setLocalTranslation(new Vector3f(0, 5, -50));
         
         
-        camNode.lookAt(geom.getLocalTranslation(), Vector3f.UNIT_Y);
+        //camNode.lookAt(geom.getLocalTranslation(), Vector3f.UNIT_Y);
         camNode.setControlDir(ControlDirection.SpatialToCamera);
         meteorFactory = new MeteorFactory(this);
         meteorFactory.generateMeteors();
@@ -100,7 +103,7 @@ public class Main extends SimpleApplication {
         
         node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed
         
-        geom.setLocalRotation(Quaternion.IDENTITY);
+        //geom.setLocalRotation(Quaternion.IDENTITY);
     }
 
     @Override

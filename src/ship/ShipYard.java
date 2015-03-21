@@ -12,7 +12,7 @@ public class ShipYard extends ArrayList<Ship> {
         this.add(ship);
     }
     
-    public boolean shipDouble(int id){
+    public boolean shipExists (int id){
         boolean exists = false;
         for(Ship ship : this){
             if (ship.getId() == id) {

@@ -22,5 +22,4 @@ public class GameController {
         this.shipKeyBoardListener = new ShipKeyBoardListener(app);
         this.shipKeyBoardListener.setShip(thisShip);
     }
-    
 }

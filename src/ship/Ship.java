@@ -1,7 +1,8 @@
 package ship;
 
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
-
+import mygame.Main;
 /**
  * 
  * @author Destion
@@ -11,6 +12,8 @@ public class Ship {
     private float x;
     private float y;
     private float z;
+    
+    private Main app;
     
     private float[] angles;
     
@@ -30,7 +33,7 @@ public class Ship {
     
     
     
-    public Ship(boolean invert, float xpos, float ypos, float zpos, int shipId){
+    public Ship(boolean invert, float xpos, float ypos, float zpos, int shipId, Main app){
         this.inverted = invert;
         this.angles = new float[]{0,0,0};
         this.x = xpos;
@@ -39,11 +42,13 @@ public class Ship {
         this.id = shipId;
         this.health = 100;
         
+        this.app = app;
+        
         Weapon weapon = new Weapon(500, this.DEFAULTFIREPOWER, this.DEFAULTRELOADTIME, this.DEFAULTAMMO );
         
     }
     
-    public Ship(boolean invert, float xpos, float ypos, float zpos, int shipId, int seperation, int firePower, int reloadTime, int ammo){
+    public Ship(boolean invert, float xpos, float ypos, float zpos, int shipId, int seperation, int firePower, int reloadTime, int ammo, Main app){
         this.inverted = invert;
         this.angles = new float[]{0, 0, 0};
         this.x = xpos;
@@ -51,6 +56,8 @@ public class Ship {
         this.z = zpos;
         this.id = shipId;
         this.health = 100;
+        
+        this.app = app;
         
         Weapon weapon = new Weapon(seperation, firePower, reloadTime, ammo);
     }
@@ -117,7 +124,7 @@ public class Ship {
         } 
     }
     
-     public void sPressed(){
+    public void sPressed(){
         if (this.inverted){
             this.angles[0] += 0.1f;
         } else{
@@ -125,7 +132,20 @@ public class Ship {
         }        
     }
      
-     public void hit(int damage){
+    public int shoot(){
+        Vector3f directionXYZ = app.getCamDir();
+        Vector3f positionXYZ = app.getCamLoc();
+        
+        Ray ray = new Ray(directionXYZ, positionXYZ);
+        
+        //TODO fill in the node for enemy ships
+        
+        
+        
+        return 0;
+    }
+     
+    public void hit(int damage){
          this.health -= damage;
      }     
      
@@ -139,45 +159,42 @@ public class Ship {
         
         long lastFire;
         long reloadStart;
-        boolean canFire;
         boolean reloading;
         
         public Weapon(int reloadTime, int firePower, int seperation, int ammunition){
             this.reloading = false;
             this.seperation = seperation;
             this.firePower = firePower;
-            this.canFire = true;
             this.reloadTime = reloadTime;
             this.ammunition = ammunition;
         }
 
             //Use fire when firing a bullet, canFire checks reloadtime
-        public void canFire(){
+        public boolean canFire(){
             if ((System.currentTimeMillis() - this.reloadStart) > this.reloadTime){
                 this.reloadStart = 0;
-                this.reloading = false;
+                return false;
             }  
             
             if (reloading){
-                this.canFire = false;
+                return false;
             } else {            
                 if ((System.currentTimeMillis() - this.lastFire) > this.seperation){
-                    this.canFire = true;
+                    return true;
                 } else {
-                    this.canFire = false;
+                    return false;
                 }
             }
         }
         public boolean fire(){
-            this.canFire();
-            if (canFire){
+            if (canFire()){
                 this.lastFire = System.currentTimeMillis();
             }
             this.ammunition -= 1;
             if (this.ammunition <= 0){
                 this.reloading = true;
             }
-            return this.canFire;
+            return this.canFire();
         }
     }
 }

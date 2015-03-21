@@ -58,7 +58,7 @@ public class Main extends SimpleApplication {
         this.flyCam.setEnabled(false);
         
         skbListener = new ShipKeyBoardListener(this);
-        testShip = new Ship(false, 0, 0, 0, 0, this);
+        testShip = new Ship(0, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this);
         skbListener.setShip(testShip);
         
         

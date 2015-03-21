@@ -3,7 +3,7 @@ package ship;
 import com.jme3.math.Vector3f;
 
 /**
- *
+ * 
  * @author Destion
  */
 public class Ship {

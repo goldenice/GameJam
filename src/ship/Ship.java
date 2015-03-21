@@ -26,7 +26,7 @@ public class Ship {
     
     private int health;
     
-    private final float SPEED = 0.00 8f;
+    private final float SPEED = 0.008f;
     
     
     

@@ -35,6 +35,10 @@ public abstract class GameObject {
         return this.direction;
     }
     
+    public void setDirection(Vector3f dir) {
+        this.direction = dir;
+    }
+    
     public int getId(){
         return this.id;
     }

@@ -2,6 +2,8 @@ package mygame;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapText;
+import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
@@ -18,6 +20,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
+import com.jme3.texture.Texture;
 import input.ShipKeyBoardListener;
 import java.io.IOException;
 import java.net.Socket;
@@ -87,6 +90,41 @@ public class Main extends SimpleApplication {
         
         this.flyCam.setEnabled(false);
         
+        //// LIGHTING ////
+        
+        // SUN // TODO: Needs direction
+        DirectionalLight sun = new DirectionalLight();
+        sun.setColor(ColorRGBA.White);
+        sun.setDirection(new Vector3f(-.5f,-.5f,-.5f).normalizeLocal());
+        rootNode.addLight(sun);
+        
+        // AMBIENT //
+        AmbientLight al = new AmbientLight();
+        al.setColor(ColorRGBA.White);
+        rootNode.addLight(al);
+        
+        //// OBJECTS ////
+        
+        // SUN //
+        Material sun_mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        Texture sun_diff = assetManager.loadTexture("Textures/sun.jpg");
+        sun_diff.setWrap(Texture.WrapMode.Repeat);
+        sun_mat.setTexture("DiffuseMap", sun_diff);
+        sun_mat.setFloat("Shininess", 255.0f);
+        
+        Sphere sun_sphere = new Sphere(32, 32, 800);
+        Geometry sun_geo = new Geometry("planet", sun_sphere);
+        sun_geo.setMaterial(sun_mat);
+        rootNode.attachChild(sun_geo);
+        sun_geo.move(new Vector3f(4000, -600, 0));
+        
+        // SHIP //
+        Material ship_mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        ship_mat.setTexture("DiffuseMap", assetManager.loadTexture("Models/ship/ship.png"));
+        Ship.mat = ship_mat;
+        
+        //// END ////
+        
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
         FogFilter fog = new FogFilter();
         fog.setFogColor(ColorRGBA.BlackNoAlpha);
@@ -94,22 +132,8 @@ public class Main extends SimpleApplication {
         fog.setFogDensity(1.5f);
         fpp.addFilter(fog);
         viewPort.addProcessor(fpp);
-        
-        Sphere planetSphere= new Sphere(32, 32, 800);
-        Geometry planetGeom = new Geometry("planet", planetSphere);
-        Material planetMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        planetMat.setColor("Color", ColorRGBA.Blue);
-        planetGeom.setMaterial(planetMat);
-        planetGeom.setCullHint(Spatial.CullHint.Never);
-        rootNode.attachChild(planetGeom);
-        planetGeom.move(new Vector3f(4000, -600, 0));
-        
 
-        skbListener = new ShipKeyBoardListener(this);     
-        
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", assetManager.loadTexture("Models/ship/ship.png"));
-        Ship.mat = mat;
+        skbListener = new ShipKeyBoardListener(this);    
         
         testShip2 = new Ship(1, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, rootNode, "Henk");
         
@@ -126,9 +150,7 @@ public class Main extends SimpleApplication {
         
         node.attachChild(camNode);        
       
-        
         camNode.setLocalTranslation(new Vector3f(0, 50, -250));
-        
         
         camNode.lookAt(testShip.getLoc(), Vector3f.UNIT_Y);
         camNode.setControlDir(ControlDirection.SpatialToCamera);

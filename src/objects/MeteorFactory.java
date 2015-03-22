@@ -52,16 +52,16 @@ public class MeteorFactory {
         Sphere sphere = new Sphere(5, 5, radius);
         
         
-        mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        mat = new Material(app.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
         
         Random random = new Random();
         int text = random.nextInt(3);
         if(text == 0){
-            mat.setTexture("ColorMap", this.app.getAssetManager().loadTexture("Textures/meteor.png"));
+            mat.setTexture("DiffuseMap", this.app.getAssetManager().loadTexture("Textures/meteor.png"));
         } else if(text == 1){
-            mat.setTexture("ColorMap", this.app.getAssetManager().loadTexture("Textures/meteor2.png"));
+            mat.setTexture("DiffuseMap", this.app.getAssetManager().loadTexture("Textures/meteor2.png"));
         } else if(text == 2){
-            mat.setTexture("ColorMap", this.app.getAssetManager().loadTexture("Textures/meteor3.png"));
+            mat.setTexture("DiffuseMap", this.app.getAssetManager().loadTexture("Textures/meteor3.png"));
         }
         
         Meteor meteor = new Meteor(id, posvect, dirvect, sphere, mat);

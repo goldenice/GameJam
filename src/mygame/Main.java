@@ -35,6 +35,8 @@ public class Main extends SimpleApplication {
     private CameraNode camNode;
     private ShipKeyBoardListener skbListener;  
     private Ship testShip2;
+    private Socket sock;
+    private NetworkManager net;
     
     
     public static Main app;
@@ -67,8 +69,8 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {     
         meteorFactory = new MeteorFactory(this);
         try {
-            Socket sock = new Socket(HOST, PORT);
-            NetworkManager net = new NetworkManager(this, sock, generateUsername());
+            this.sock = new Socket(HOST, PORT);
+            this.net = new NetworkManager(this, sock, generateUsername());
             Thread thread = new Thread(net);
             thread.start();
         } catch (IOException e) {
@@ -168,5 +170,12 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(thing);
     }
     
+    public NetworkManager getNet() {
+        return net;
+    }
+    
+    public Socket getSock() {
+        return sock;
+    }
+    
 }
-

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
+import objects.Meteor;
 import objects.MeteorFactory;
 import ship.Ship;
 
@@ -52,14 +53,22 @@ public class Main extends SimpleApplication {
     
     private BitmapText hudText;
     private Picture deathScreen;
+    private Picture leaveScreen;
+    
+    private static ArrayList<Spatial> geomMeteorList;
+    private static Node metNode;
+    
     
     public static Main app;
-    public static final String HOST = "localhost";
+    public static final String HOST = "130.89.89.27";
     public static final int PORT = 6969;
     public static final String[] USERNAMES = { "Button", "EBOLA.EXE", "OneManCheeseBurgerApocalypse", "BlackMesa", "Microsoft_GLa-DoS", "ZeroCool", "CrashOverride", "AcidBurn", "CerealKiller", "ThaPhreak" };
     
     public static void main(String[] args) {
         app = new Main();  
+        
+        geomMeteorList = new ArrayList<Spatial>();
+        metNode = new Node();
         
         app.setShowSettings(true);
         AppSettings settings = new AppSettings(true);
@@ -170,6 +179,14 @@ public class Main extends SimpleApplication {
         this.deathScreen.setWidth(settings.getWidth());
         this.deathScreen.setPosition(0,0);
         
+        this.leaveScreen = new Picture("Leavescreen");
+        this.leaveScreen.setImage(this.assetManager, "Textures/Leaving.png", true);
+        this.leaveScreen.setHeight(settings.getHeight());
+        this.leaveScreen.setWidth(settings.getWidth());
+        this.leaveScreen.setPosition(0,0);
+        
+        rootNode.attachChild(metNode);
+        
        try {
             this.sock = new Socket(HOST, PORT);
             this.net = new NetworkManager(this, sock, generateUsername());
@@ -197,6 +214,14 @@ public class Main extends SimpleApplication {
         //TODO: add render code
     }
     
+    public Node getMetNode(){
+        return metNode;
+    }
+    
+    public ArrayList<Spatial> getGeomList(){
+        return this.geomMeteorList;
+    }
+    
     public Vector3f getCamDir(){
         return this.cam.getDirection();
     }
@@ -209,12 +234,12 @@ public class Main extends SimpleApplication {
         node.rotate( x , y , z );
     }
     
-    public boolean doesCollide(Collidable object){
-        CollisionResults colRes = new CollisionResults();
-        this.rootNode.collideWith(object, colRes);
-        System.out.println(colRes.size());
-        return colRes.size() > 250; 
-    }
+//    public boolean doesCollide(Collidable object){
+//        CollisionResults colRes = new CollisionResults();
+//        this.getMetNode().collideWith(object, colRes);
+//        System.out.println(colRes.size());
+//        return colRes.size() > 0; 
+//    }
     
     public static String generateUsername() {
         Random rand = new Random();
@@ -257,5 +282,9 @@ public class Main extends SimpleApplication {
     
     public Node getGui(){
         return this.guiNode;
+    }
+    
+    public Picture getLeave(){
+        return this.leaveScreen;
     }
 }

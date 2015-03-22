@@ -34,6 +34,7 @@ public class MeteorFactory {
     private int count = 0;
     
     
+    
     public MeteorFactory(Main app){
         this.app = app;
         meteors = new ArrayList<Meteor>();
@@ -84,6 +85,8 @@ public class MeteorFactory {
         return null;
     }
 
+    
+    
     public Node getNode(){
         return node;
     }

@@ -14,6 +14,7 @@ import mygame.Command;
 import mygame.Main;
 import mygame.StepListener;
 import objects.GameObject;
+import objects.Meteor;
 /**
  * 
  * @author Destion
@@ -25,7 +26,7 @@ public class Ship extends GameObject implements StepListener {
     private Vector3f speeds;
     private float[] angles;
     private int inverted;
-    private int health;
+    private float health;
     
     private Main app;
     
@@ -35,6 +36,8 @@ public class Ship extends GameObject implements StepListener {
     public static Spatial globalSpatial;
     
     public PointLight light;
+    
+    private boolean respawned;
     
     private Spatial spatial;
     private Node node;
@@ -55,7 +58,7 @@ public class Ship extends GameObject implements StepListener {
     
     public Ship(int id, Vector3f position, Vector3f direction, boolean invert, Main app, Node node, String username){
         this(id, position, direction, invert, Ship.DEFAULTRELOADTIME, Ship.DEFAULTFIREPOWER, 500, Ship.DEFAULTAMMO, app, node, username);
-
+        this.respawned = false;
     }
     
     public Ship(int id, Vector3f position, Vector3f direction, boolean invert, int seperation, int firePower, int reloadTime, int ammo, Main app, Node node, String username){
@@ -74,6 +77,7 @@ public class Ship extends GameObject implements StepListener {
         this.spatial = globalSpatial.clone();
         node.attachChild(spatial);
         this.node = node;
+        this.respawned = false;
         
         
     }
@@ -93,7 +97,7 @@ public class Ship extends GameObject implements StepListener {
         return this.position.z;
     }
     
-    public void reduceHealth(int x){
+    public void reduceHealth(float x){
         this.health -= x;
     }
     
@@ -106,7 +110,7 @@ public class Ship extends GameObject implements StepListener {
         return this.angles;
     }
     
-    public int getHealth(){
+    public float getHealth(){
         return this.health;
     }
     
@@ -119,32 +123,50 @@ public class Ship extends GameObject implements StepListener {
      *
      * @throws IOException
      */
-    public void step(){
-        if(this.app.doesCollide(this.getSpatial().getWorldBound())){
-            System.out.println("Collison!");
-        }
+    public synchronized void step(){
+        
+                
+        
+//        for (Meteor met : this.app.meteorFactory.getMeteors()){
+//            this.app.getMetNode().attachChild(met.getSpatial());
+//        }
+//        
+//        if (this.app.doesCollide(this.getSpatial())){
+//            this.health = 0;
+//        }
+        
         node.move(this.app.getCamera().getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed        
         this.setPosition(node.getLocalTranslation());
         
         this.spatial.setLocalRotation(Quaternion.IDENTITY);
         if ((this.getX() > 3000 || this.getY() > 3000 || this.getZ() > 3000 || this.getX() < -3000 || this.getY() < -3000 || this.getZ() < -3000) && (this.getHealth() > 0)){
-            this.reduceHealth(1);
-        } else if(this.getHealth() <= 0){
+            this.reduceHealth(0.25f);
+            app.getGui().attachChild(app.getLeave());
+        } else if (!((this.getX() > 3000 || this.getY() > 3000 || this.getZ() > 3000 || this.getX() < -3000 || this.getY() < -3000 || this.getZ() < -3000))){
+            app.getLeave().removeFromParent();
+        } else if((this.getHealth() <= 0) && (this.health != -100)){
             app.getGui().attachChild(app.getDeathScreen());
             this.dead = true;
+            
+            this.respawned = true;
             this.deathtime = System.currentTimeMillis();
             try{
                 this.app.getNet().send(new Command(Command.CommandType.KILL).addArgument(Integer.toString(this.id)));
             } catch (IOException e){
                 
             }
+            this.health = -100;
         }
         
         
-        if ((System.currentTimeMillis() - this.deathtime) > RESPAWN){
-            app.getGui().detachChild(app.getDeathScreen());
-            this.setPosition(new Vector3f(0,0,0));
-        } 
+//        if ((System.currentTimeMillis() - this.deathtime) > RESPAWN){
+//            if (respawned){
+//                this.dead = false;
+//                this.respawned = false;
+//                app.getGui().detachChild(app.getDeathScreen());
+//                this.setPosition(new Vector3f(0,0,0));
+//            }
+//        } 
         
         //System.out.println(String.format("x: %s, y: %s, z: %s", angles[0], angles[1], angles[2]));
         //System.out.println(String.format("x: %s, y: %s, z: %s", Math.sin(this.angles[2]) * Math.cos(this.angles[1]) , Math.sin(this.angles[0]) * Math.cos(this.angles[2]), Math.sin(this.angles[1]) * Math.cos(this.angles[0])));

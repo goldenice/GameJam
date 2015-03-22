@@ -32,6 +32,7 @@ public class Meteor extends GameObject{
         geom.setMaterial(material);
         geom.move(position.x, position.y, position.z);
         geom.rotate(direction.x, direction.y, direction.z);
+        this.node.attachChild(this.geom);
     }
     
     public void attach() {

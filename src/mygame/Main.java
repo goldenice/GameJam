@@ -1,6 +1,8 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.collision.Collidable;
+import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -46,7 +48,6 @@ public class Main extends SimpleApplication {
     
     private BitmapText hudText;
     private Picture deathScreen;
-    
     
     public static Main app;
     public static final String HOST = "localhost";
@@ -182,12 +183,6 @@ public class Main extends SimpleApplication {
         meteorFactory.processQueue();
         this.testShip.step();
 
-        if ((testShip.getX() > 3000 || testShip.getY() > 3000 || testShip.getZ() > 3000 || testShip.getX() < -3000 || testShip.getY() < -3000 || testShip.getZ() < -3000) && (testShip.getHealth() > 0)){
-            testShip.reduceHealth(1);
-        } else if(testShip.getHealth() <= 0){
-            guiNode.attachChild(this.deathScreen);
-        }
-       
         this.testShip.getWep().tick();
         this.hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8" + " | Health: " + testShip.getHealth());
     }
@@ -207,6 +202,12 @@ public class Main extends SimpleApplication {
     
     public void setNodeDir(Node node, float x, float y, float z){
         node.rotate( x , y , z );
+    }
+    
+    public boolean doesCollide(Collidable object){
+        CollisionResults colRes = new CollisionResults();
+        this.rootNode.collideWith(object, colRes);
+        return colRes.size() > 0;        
     }
     
     public static String generateUsername() {
@@ -230,5 +231,11 @@ public class Main extends SimpleApplication {
         return sock;
     }
     
+    public Picture getDeathScreen(){
+        return this.deathScreen;
+    }
     
+    public Node getGui(){
+        return this.guiNode;
+    }
 }

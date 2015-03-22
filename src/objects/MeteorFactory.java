@@ -72,12 +72,6 @@ public class MeteorFactory {
     public ArrayList<Meteor> getMeteors(){
         return this.meteors;
     }
-    
-    public boolean doesCollide(Collidable object){
-        CollisionResults colRes = new CollisionResults();
-        this.node.collideWith(object, colRes);
-        return colRes.size() != 0;        
-    }
    
     public synchronized void processQueue() {
         /*for (Meteor meteor : queue) {

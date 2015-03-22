@@ -35,9 +35,9 @@ public class Main extends SimpleApplication {
     CameraNode camNode;
     ShipKeyBoardListener skbListener;  
     Ship testShip2;
-    public Socket sock;
-    public Thread thread;
-    public NetworkManager net;
+    private Socket sock;
+    private Thread thread;
+    private NetworkManager net;
     
     public static Main app;
     public static final String HOST = "localhost";

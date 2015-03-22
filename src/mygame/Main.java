@@ -148,7 +148,7 @@ public class Main extends SimpleApplication {
         meteorFactory.processQueue();
         this.testShip.step();
 
-        this.testShip.getWep().reload();
+        this.testShip.getWep().tick();
         this.hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8");
     }
 

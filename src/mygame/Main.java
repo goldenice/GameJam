@@ -99,7 +99,7 @@ public class Main extends SimpleApplication {
         this.node.attachChild(camNode);        
       
         
-        camNode.setLocalTranslation(new Vector3f(0, 0, -50));
+        camNode.setLocalTranslation(new Vector3f(0, 10, -50));
         
         
         //camNode.lookAt(geom.getLocalTranslation(), Vector3f.UNIT_Y);

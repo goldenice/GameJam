@@ -23,11 +23,11 @@ public class Meteor extends GameObject{
     private Node node;
     public static MeteorFactory meteorFactory;
     
-    Meteor(int id, Vector3f position, Vector3f direction, Sphere sphere, Material material, Node node){
+    Meteor(int id, Vector3f position, Vector3f direction, Sphere sphere, Material material){
         super(id, position, direction);
         this.sphere = sphere;
         this.material = material;
-        this.node = node;
+        this.node = new Node();
         geom = new Geometry("Sphere", sphere);
         geom.setMaterial(material);
         geom.move(position.x, position.y, position.z);
@@ -35,7 +35,7 @@ public class Meteor extends GameObject{
     }
     
     public void attach() {
-        node.attachChild(geom);
+        //node.attachChild(geom);
     }
     
     public void setPosition(Vector3f pos){

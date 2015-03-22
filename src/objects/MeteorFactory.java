@@ -17,6 +17,7 @@ import com.jme3.scene.shape.Sphere;
 import java.util.ArrayList;
 import java.util.Random;
 import mygame.Main;
+import mygame.World;
 
 /**
  *
@@ -52,9 +53,9 @@ public class MeteorFactory {
         Vector3f posvect = new Vector3f(pos[0], pos[1], pos[2]);
         Vector3f dirvect = new Vector3f(rot[0], rot[1], rot[2]);
         Sphere sphere = new Sphere(5, 5, radius);
-        Meteor meteor = new Meteor(id, posvect, dirvect, sphere, mat, node);
+        Meteor meteor = new Meteor(id, posvect, dirvect, sphere, mat);
         meteors.add(meteor);
-        queue.add(meteor);
+        World.getInstance().register(id, meteor);
     }
     
     public ArrayList<Meteor> getMeteors(){
@@ -68,10 +69,10 @@ public class MeteorFactory {
     }
    
     public synchronized void processQueue() {
-        for (Meteor meteor : queue) {
+        /*for (Meteor meteor : queue) {
             meteor.attach();
         }
-        queue = new ArrayList<Meteor>();
+        queue = new ArrayList<Meteor>();*/
     }
         
     public Geometry collideObject(Collidable object){

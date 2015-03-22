@@ -8,12 +8,13 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import mygame.Main;
+import mygame.StepListener;
 import objects.GameObject;
 /**
  * 
  * @author Destion
  */
-public class Ship extends GameObject{
+public class Ship extends GameObject implements StepListener {
     
     private int id; 
     
@@ -44,12 +45,11 @@ public class Ship extends GameObject{
     
     
     
-    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, Main app, Node node, String username){
-        this(id, position, direction, invert, Ship.DEFAULTRELOADTIME, Ship.DEFAULTFIREPOWER, 500, Ship.DEFAULTAMMO, app, node, username);
-
+    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, Main app, Node node){
+        this(id, position, direction, invert, Ship.DEFAULTRELOADTIME, Ship.DEFAULTFIREPOWER, 500, Ship.DEFAULTAMMO, app, node);
     }
     
-    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, int seperation, int firePower, int reloadTime, int ammo, Main app, Node node, String username){
+    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, int seperation, int firePower, int reloadTime, int ammo, Main app, Node node){
         super(id, position, direction);
         this.speeds = new Vector3f(0, 0, 0);
         this.inverted = (invert) ? -1 : 1;
@@ -148,7 +148,7 @@ public class Ship extends GameObject{
     }
     
     public Spatial getSpatial(){
-        return this.spatial;
+        return this.node;
     }
          
     public void shoot(){

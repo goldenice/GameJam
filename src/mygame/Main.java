@@ -19,6 +19,7 @@ import com.jme3.system.AppSettings;
 import input.ShipKeyBoardListener;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Random;
 import objects.MeteorFactory;
 import ship.Ship;
@@ -38,6 +39,10 @@ public class Main extends SimpleApplication {
     private Socket sock;
     private Thread thread;
     private NetworkManager net;
+    private Node controlnode;
+    private CameraNode camnode;
+    
+    private ArrayList<StepListener> steplisteners = new ArrayList<StepListener>();
     
     public static Main app;
     public static final String HOST = "localhost";
@@ -99,47 +104,39 @@ public class Main extends SimpleApplication {
         planetGeom.move(new Vector3f(4000, -600, 0));
         
 
-        skbListener = new ShipKeyBoardListener(this);     
+        //skbListener = new ShipKeyBoardListener(this);     
         
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setTexture("ColorMap", assetManager.loadTexture("Models/ship/ship.png"));
         Ship.mat = mat;
+        controlnode = new Node();
         
-        testShip2 = new Ship(1, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, rootNode, "Henk");
-        
-        Node node = new Node();
-
-        
-        rootNode.attachChild(node);
-        
-        testShip = new Ship(0, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, node, "Piet");
-        skbListener.setShip(testShip);
+        //skbListener.setShip(testShip);
 
         cam.setFrustumFar(5000);
-        CameraNode camNode = new CameraNode("Camnode", cam);
+        camnode = new CameraNode("Camnode", cam);
         
-        node.attachChild(camNode);        
+        controlnode.attachChild(camnode);        
       
         
-        camNode.setLocalTranslation(new Vector3f(0, 50, -250));
+       
         
         
-        camNode.lookAt(testShip.getLoc(), Vector3f.UNIT_Y);
-        camNode.setControlDir(ControlDirection.SpatialToCamera);
+        //camnode.lookAt(testShip.getLoc(), Vector3f.UNIT_Y);
+        //camnode.setControlDir(ControlDirection.SpatialToCamera);
         meteorFactory = new MeteorFactory(this);
         meteorFactory.generateMeteors();
-
+      
+        this.addStepListener(World.getInstance());
         
     }
 
     @Override
-    public void simpleUpdate(float tpf) {
-        skbListener.step();
-        World.getInstance().processQueue();
-        meteorFactory.processQueue();
-        this.testShip.step();
-
-        
+    public synchronized void simpleUpdate(float tpf) {
+        for (int i = 0; i < steplisteners.size(); i++) {
+            System.out.println(steplisteners.get(i).getClass());
+            steplisteners.get(i).step();
+        }
     }
 
     @Override
@@ -178,6 +175,18 @@ public class Main extends SimpleApplication {
     
     public Socket getSock() {
         return sock;
+    }
+    
+    public Node getControlNode() {
+        return controlnode;
+    }
+    
+    public CameraNode getCamNode() {
+        return camnode;
+    }
+    
+    public synchronized void addStepListener(StepListener sl) {
+        steplisteners.add(sl);
     }
     
     

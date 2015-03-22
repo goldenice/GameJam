@@ -12,38 +12,26 @@ import objects.GameObject;
  */
 public class Ship extends GameObject{
     
-    
-    private Main app;
+    private int id; 
     
     private Vector3f speeds;
-    
     private float[] angles;
+    private int inverted;
+    private int health;
     
-    private int id; 
+    private Main app;
     
     private final int DEFAULTFIREPOWER = 50;
     private final int DEFAULTRELOADTIME = 5000;
     private final int DEFAULTAMMO = 5;
-    
-    
-    //Invert the4 directions the ship takes on W or S presses
-    private int inverted;
-    
-    private int health;
-    
     private final float SPEED = 0.008f;
+    
     Weapon weapon;
-    
-    
-    
+   
     public Ship(int id, Vector3f position, Vector3f direction, boolean invert, Main app){
         super(id, position, direction);
         this.speeds = new Vector3f(0, 0, 0);
-        if (invert) {
-            this.inverted = -1;
-        } else {
-            this.inverted = 1;
-        }
+        this.inverted = (invert) ? -1 : 1;
         this.angles = new float[]{0,0,0};
         this.health = 100;
         

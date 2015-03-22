@@ -31,7 +31,8 @@ public class Main extends SimpleApplication {
     CameraNode camNode;
     Node node;
     ShipKeyBoardListener skbListener;
-            
+    Spatial player;      
+    
     public static void main(String[] args) {
         Main app = new Main();  
         
@@ -76,18 +77,17 @@ public class Main extends SimpleApplication {
         
 
         
-        Box b = new Box(1, 1, 1);
-        geom = new Geometry("Box", b);
+        this.player = assetManager.loadModel("Project_Assets/ship.obj");
 
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.LightGray);
-        geom.setMaterial(mat);
+        player.setMaterial(mat);
 
         this.node = new Node();
         
         rootNode.attachChild(node);
         
-        this.node.attachChild(geom);
+        this.node.attachChild(player);
         cam.setFrustumFar(3000);
         CameraNode camNode = new CameraNode("Camnode", cam);
         
@@ -97,7 +97,7 @@ public class Main extends SimpleApplication {
         camNode.setLocalTranslation(new Vector3f(0, 0, -25));
         
         
-        camNode.lookAt(geom.getLocalTranslation(), Vector3f.UNIT_Y);
+        camNode.lookAt(player.getLocalTranslation(), Vector3f.UNIT_Y);
         camNode.setControlDir(ControlDirection.SpatialToCamera);
         meteorFactory = new MeteorFactory(this);
         meteorFactory.generateMeteors();
@@ -109,13 +109,13 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         skbListener.step();
         //this.testShip.step();
-        if(meteorFactory.doesCollide(geom.getWorldBound())){
+        if(meteorFactory.doesCollide(player.getWorldBound())){
             System.out.println("Collison!");
         }
         node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed        
         this.testShip.setPosition(node.getLocalTranslation());
         
-        geom.setLocalRotation(Quaternion.IDENTITY);
+        player.setLocalRotation(Quaternion.IDENTITY);
     }
 
     @Override

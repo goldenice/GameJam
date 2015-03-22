@@ -126,6 +126,15 @@ public class Ship extends GameObject implements StepListener {
      */
     public void step(){
         
+        if (delta_pos != Vector3f.NAN) {
+            node.move(delta_pos);
+            delta_pos = Vector3f.NAN;
+        }
+        if (delta_dir != Vector3f.NAN) {
+            app.setNodeDir(node, delta_dir.x, delta_dir.y, delta_dir.z);
+            delta_dir = Vector3f.NAN;
+        }
+        
         if(this.app.doesCollide(this.getSpatial().getWorldBound())){
             System.out.println("Collison!");
         }

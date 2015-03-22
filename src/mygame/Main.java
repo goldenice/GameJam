@@ -106,6 +106,8 @@ public class Main extends SimpleApplication {
         camNode.setControlDir(ControlDirection.SpatialToCamera);
         meteorFactory = new MeteorFactory(this);
         meteorFactory.generateMeteors();
+        
+        
 
         
     }

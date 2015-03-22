@@ -24,6 +24,7 @@ import com.jme3.texture.Texture;
 import input.ShipKeyBoardListener;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Random;
 import objects.MeteorFactory;
 import ship.Ship;
@@ -44,7 +45,7 @@ public class Main extends SimpleApplication {
     private Thread thread;
     private NetworkManager net;
     
-    private ArrayList<StepListener> steplisteners = new ArrayList<StepListeners>();
+    private ArrayList<StepListener> steplisteners = new ArrayList<StepListener>();
     
     private BitmapText hudText;
     private Picture deathScreen;

@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Command {
 
 	public enum CommandType {
-		CONNECT, OBJECT, CHAT, QUIT
+		CONNECT, OBJECT, CHAT, QUIT, CONTROL
 	}
 
 	private final CommandType command;

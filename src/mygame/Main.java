@@ -211,12 +211,11 @@ public class Main extends SimpleApplication {
         node.rotate( x , y , z );
     }
     
-    public boolean doesCollide(Collidable object){
+  /*  public boolean doesCollide(Collidable object){
         CollisionResults colRes = new CollisionResults();
         this.rootNode.collideWith(object, colRes);
-        System.out.println(colRes.size());
         return colRes.size() > 250; 
-    }
+    } */
     
     public static String generateUsername() {
         Random rand = new Random();

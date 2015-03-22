@@ -103,8 +103,8 @@ public class NetworkManager implements Runnable {
     }
     
     public void updateLocation(String[] args) {
-        System.out.println("EBOLAUPDATE EXCEPTION");
         if (Integer.parseInt(args[0]) != controlId) {
+            System.out.println("EBOLAUPDATE EXCEPTION");
             World.getInstance().getEntityById(Integer.parseInt(args[0])).setPosition(new Vector3f(
                         Float.parseFloat(args[2]),
                         Float.parseFloat(args[3]),

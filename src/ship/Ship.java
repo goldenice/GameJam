@@ -10,12 +10,13 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import mygame.Main;
+import mygame.StepListener;
 import objects.GameObject;
 /**
  * 
  * @author Destion
  */
-public class Ship extends GameObject{
+public class Ship extends GameObject implements StepListener {
     
     private int id; 
     
@@ -88,6 +89,10 @@ public class Ship extends GameObject{
         return this.position.z;
     }
     
+    public void reduceHealth(int x){
+        this.health -= x;
+    }
+    
     public Vector3f getLoc(){
         //This is here for backwards compability
         return getPosition();
@@ -95,6 +100,10 @@ public class Ship extends GameObject{
     
     public float[] getAngles(){
         return this.angles;
+    }
+    
+    public int getHealth(){
+        return this.health;
     }
     
     
@@ -181,7 +190,7 @@ public class Ship extends GameObject{
      }     
      
     //Weapon carries the reloadtime and damage of the weapon this ship is carrying, enabling multiple types of ship
-    public class Weapon {
+    public class Weapon implements StepListener {
         int ammunition;
         boolean reloading;
         boolean firing;
@@ -214,7 +223,7 @@ public class Ship extends GameObject{
             return false;
         }
         
-        public void tick() {
+        public void step() {
             long currentTime = System.currentTimeMillis();
             if (reloading && currentTime - lastReload > reload) {
                 reloading = false;

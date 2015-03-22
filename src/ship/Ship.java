@@ -125,14 +125,15 @@ public class Ship extends GameObject implements StepListener {
      * @throws IOException
      */
     public void step(){
-        
+        node.move(delta_pos);
+        if (delta_pos.equals(Vector3f.ZERO)) System.out.println("SWEKNEGER" +  delta_pos);
        
         
         /*if(this.app.doesCollide(this.getSpatial().getWorldBound())){
             System.out.println("Collison!");
         }*/
-        node.move(this.app.getCamera().getDirection().normalizeLocal().mult(new Vector3f(1f, 1f, 1f).add(delta_pos))); // 0.1 = speed        
-        this.setPosition(node.getLocalTranslation());
+        node.move(this.app.getCamera().getDirection().normalizeLocal().mult(new Vector3f(1f, 1f, 1f))); // 0.1 = speed        
+        //this.setPosition(node.getLocalTranslation());
         this.direction = this.app.getCamDir();
         this.spatial.setLocalRotation(Quaternion.IDENTITY);
 
@@ -169,7 +170,7 @@ public class Ship extends GameObject implements StepListener {
             this.setPosition(new Vector3f(0,0,0));
         } 
         
-        if (delta_pos != Vector3f.ZERO) {
+        if (!delta_pos.equals(Vector3f.ZERO)) {
             delta_pos = Vector3f.ZERO;
         }
         if (delta_dir != Vector3f.ZERO) {

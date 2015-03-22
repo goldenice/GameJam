@@ -18,6 +18,7 @@ public abstract class GameObject {
     protected Vector3f direction;
     protected Vector3f delta_pos = Vector3f.ZERO;
     protected Vector3f delta_dir = Vector3f.ZERO;
+    private boolean flikkereruit = false;
     
     public GameObject(int id){
         this(id, new Vector3f(0, 0, 0), new Vector3f(0, 0, 0));
@@ -48,6 +49,7 @@ public abstract class GameObject {
     
     public void setPosition(Vector3f position){
         this.delta_pos = this.position.subtract(position);
+        System.out.println(this.delta_pos);
         this.position = position;
     }
     

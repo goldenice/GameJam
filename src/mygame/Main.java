@@ -131,8 +131,9 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         skbListener.step();
+        World.getInstance().processQueue();
         meteorFactory.processQueue();
-        //this.testShip.step();
+        
         if(meteorFactory.doesCollide(player.getWorldBound())){
             System.out.println("Collison!");
         }

@@ -16,6 +16,7 @@ import ship.Ship;
  */
 public class GameController {
     private Main app;
+    private ArrayList<Command> queue;
     private HashMap<Integer, GameObject> objects;
     
     public GameController(Main app){
@@ -23,9 +24,13 @@ public class GameController {
         this.objects = new HashMap<Integer, GameObject>();
     }
     
-    private GameObject getById(int id){
+    public GameObject getById(int id){
         return objects.get(id);
     }
+    
+    public void addToQueue(Command command){
+        
+    } 
     
     
 }

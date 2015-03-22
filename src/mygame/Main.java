@@ -82,16 +82,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {     
         meteorFactory = new MeteorFactory(this);
-        try {
-            this.sock = new Socket(HOST, PORT);
-            this.net = new NetworkManager(this, sock, generateUsername());
-            this.thread = new Thread(net);
-            thread.start();
-        } catch (IOException e) {
-            System.err.println("SOCKET FUCKUP EXCEPTION");
-            e.printStackTrace();
-            System.exit(1);
-        }
+
         
         this.flyCam.setEnabled(false);
         
@@ -178,6 +169,17 @@ public class Main extends SimpleApplication {
         this.deathScreen.setHeight(settings.getHeight());
         this.deathScreen.setWidth(settings.getWidth());
         this.deathScreen.setPosition(0,0);
+        
+       try {
+            this.sock = new Socket(HOST, PORT);
+            this.net = new NetworkManager(this, sock, generateUsername());
+            this.thread = new Thread(net);
+            thread.start();
+        } catch (IOException e) {
+            System.err.println("SOCKET FUCKUP EXCEPTION");
+            e.printStackTrace();
+            System.exit(1);
+        }
         
     }
 

@@ -69,6 +69,10 @@ public class NetworkManager implements Runnable {
         out.flush();
     }
     
+    public int getId(){
+        return this.controlId;
+    }
+    
     public void updateObject(String[] args) {
         int id = Integer.parseInt(args[0]);
         if ("Meteor".equals(args[1])) {

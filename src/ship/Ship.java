@@ -9,6 +9,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import mygame.Command;
 import mygame.Main;
 import mygame.StepListener;
 import objects.GameObject;
@@ -117,8 +121,17 @@ public class Ship extends GameObject implements StepListener {
         }
         node.move(this.app.getCamera().getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed        
         this.setPosition(node.getLocalTranslation());
-        
+        this.direction = this.app.getCamDir();
         this.spatial.setLocalRotation(Quaternion.IDENTITY);
+        if (this.id == this.app.getNet().getId()){
+            String[] argStrings = new String[]{Float.toString(position.x), Float.toString(position.y), Float.toString(position.z), Float.toString(direction.x), Float.toString(direction.y), Float.toString(direction.z)};
+            try {
+                this.app.getNet().send(new Command(Command.CommandType.MOVE, argStrings));
+            } catch (IOException ex) {
+                Logger.getLogger(Ship.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
         
         //System.out.println(String.format("x: %s, y: %s, z: %s", angles[0], angles[1], angles[2]));
         //System.out.println(String.format("x: %s, y: %s, z: %s", Math.sin(this.angles[2]) * Math.cos(this.angles[1]) , Math.sin(this.angles[0]) * Math.cos(this.angles[2]), Math.sin(this.angles[1]) * Math.cos(this.angles[0])));

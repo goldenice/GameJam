@@ -105,16 +105,18 @@ public class NetworkManager implements Runnable {
     public void updateLocation(String[] args) {
         if (Integer.parseInt(args[0]) != controlId) {
             System.out.println("EBOLAUPDATE EXCEPTION");
-            World.getInstance().getEntityById(Integer.parseInt(args[0])).setPosition(new Vector3f(
-                        Float.parseFloat(args[2]),
-                        Float.parseFloat(args[3]),
-                        Float.parseFloat(args[4])
-                    ));
-            World.getInstance().getEntityById(Integer.parseInt(args[0])).setDirection(new Vector3f(
-                        Float.parseFloat(args[5]),
-                        Float.parseFloat(args[6]),
-                        Float.parseFloat(args[7])
-                    ));
+            if ( World.getInstance().getEntityById(Integer.parseInt(args[0])) != null ) {
+                World.getInstance().getEntityById(Integer.parseInt(args[0])).setPosition(new Vector3f(
+                            Float.parseFloat(args[2]),
+                            Float.parseFloat(args[3]),
+                            Float.parseFloat(args[4])
+                        ));
+                World.getInstance().getEntityById(Integer.parseInt(args[0])).setDirection(new Vector3f(
+                            Float.parseFloat(args[5]),
+                            Float.parseFloat(args[6]),
+                            Float.parseFloat(args[7])
+                        ));
+            }
         }
     }
     

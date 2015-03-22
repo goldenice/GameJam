@@ -54,7 +54,7 @@ public class Main extends SimpleApplication {
     private Picture deathScreen;
     
     public static Main app;
-    public static final String HOST = "localhost";
+    public static final String HOST = "130.89.89.27";
     public static final int PORT = 6969;
     public static final String[] USERNAMES = { "Button", "EBOLA.EXE", "OneManCheeseBurgerApocalypse", "BlackMesa", "Microsoft_GLa-DoS", "ZeroCool", "CrashOverride", "AcidBurn", "CerealKiller", "ThaPhreak" };
     

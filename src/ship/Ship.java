@@ -24,6 +24,8 @@ public class Ship extends GameObject implements StepListener {
     
     private int id; 
     
+    private int counter;
+    
     private Vector3f speeds;
     private float[] angles;
     private int inverted;
@@ -62,6 +64,7 @@ public class Ship extends GameObject implements StepListener {
     
     public Ship(int id, Vector3f position, Vector3f direction, boolean invert, int seperation, int firePower, int reloadTime, int ammo, Main app, Node node, String username){
         super(id, position, direction);
+        this.counter = 0;
         this.speeds = new Vector3f(0, 0, 0);
         this.inverted = (invert) ? -1 : 1;
         this.angles = new float[]{0, 0, 0};
@@ -122,6 +125,7 @@ public class Ship extends GameObject implements StepListener {
      * @throws IOException
      */
     public void step(){
+        
         if(this.app.doesCollide(this.getSpatial().getWorldBound())){
             System.out.println("Collison!");
         }
@@ -131,11 +135,15 @@ public class Ship extends GameObject implements StepListener {
         this.spatial.setLocalRotation(Quaternion.IDENTITY);
 
         if (this.id == this.app.getNet().getId()){
-            String[] argStrings = new String[]{Float.toString(position.x), Float.toString(position.y), Float.toString(position.z), Float.toString(direction.x), Float.toString(direction.y), Float.toString(direction.z)};
-            try {
-                this.app.getNet().send(new Command(Command.CommandType.MOVE, argStrings));
-            } catch (IOException ex) {
-                Logger.getLogger(Ship.class.getName()).log(Level.SEVERE, null, ex);
+            counter += 1;
+            if(counter == 60){
+                counter = 0;
+                String[] argStrings = new String[]{Float.toString(position.x), Float.toString(position.y), Float.toString(position.z), Float.toString(direction.x), Float.toString(direction.y), Float.toString(direction.z)};
+                try {
+                    this.app.getNet().send(new Command(Command.CommandType.MOVE, argStrings));
+                } catch (IOException ex) {
+                    Logger.getLogger(Ship.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         }

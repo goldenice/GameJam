@@ -5,6 +5,8 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.FogFilter;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
@@ -15,6 +17,8 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import input.ShipKeyBoardListener;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.Random;
 import objects.MeteorFactory;
 import ship.Ship;
@@ -31,6 +35,10 @@ public class Main extends SimpleApplication {
     CameraNode camNode;
     Node node;
     ShipKeyBoardListener skbListener;
+    
+    public static final String HOST = "localhost";
+    public static final int PORT = 6969;
+    public static final String[] USERNAMES = { "Button", "EBOLA.EXE", "OneManCheeseBurgerApocalypse", "BlackMesa", "Microsoft_GLa-DoS", "ZeroCool", "CrashOverride", "AcidBurn", "CerealKiller", "ThaPhreak" };
             
     public static void main(String[] args) {
         Main app = new Main();  
@@ -50,14 +58,32 @@ public class Main extends SimpleApplication {
         settings.setVSync(true);
         settings.setResolution(1024, 720);
         
-      
-        
         app.start();
     }
 
     @Override
-    public void simpleInitApp() {         
+    public void simpleInitApp() { 
+        meteorFactory = new MeteorFactory(this);
+        try {
+            Socket sock = new Socket(HOST, PORT);
+            NetworkManager net = new NetworkManager(this, sock, generateUsername());
+            Thread thread = new Thread(net);
+            thread.start();
+        } catch (IOException e) {
+            System.err.println("SOCKET FUCKUP EXCEPTION");
+            e.printStackTrace();
+            System.exit(1);
+        }
+        
         this.flyCam.setEnabled(false);
+        
+        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+        FogFilter fog = new FogFilter();
+        fog.setFogColor(ColorRGBA.BlackNoAlpha);
+        fog.setFogDistance(1200);
+        fog.setFogDensity(1.1f);
+        fpp.addFilter(fog);
+        viewPort.addProcessor(fpp);
         
         Sphere planetSphere= new Sphere(20,20,800);
         Geometry planetGeom = new Geometry("planet", planetSphere);
@@ -88,7 +114,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(node);
         
         this.node.attachChild(geom);
-        cam.setFrustumFar(3000);
+        cam.setFrustumFar(5000);
         CameraNode camNode = new CameraNode("Camnode", cam);
         
         this.node.attachChild(camNode);        
@@ -99,16 +125,15 @@ public class Main extends SimpleApplication {
         
         camNode.lookAt(geom.getLocalTranslation(), Vector3f.UNIT_Y);
         camNode.setControlDir(ControlDirection.SpatialToCamera);
-        meteorFactory = new MeteorFactory(this);
-        meteorFactory.generateMeteors();
-
         
+        meteorFactory.generateMeteors();
     }
 
     @Override
     public void simpleUpdate(float tpf) {
         skbListener.step();
-        //this.testShip.step();
+        meteorFactory.processQueue();
+        
         if(meteorFactory.doesCollide(geom.getWorldBound())){
             System.out.println("Collison!");
         }
@@ -133,5 +158,14 @@ public class Main extends SimpleApplication {
     
     public void setNodeDir(float x, float y, float z){
         node.rotate( x , y , z );
+    }
+    
+    public MeteorFactory getMeteorFactory() {
+        return meteorFactory;
+    }
+    
+    public static String generateUsername() {
+        Random rand = new Random();
+        return USERNAMES[rand.nextInt(USERNAMES.length)] + (new Integer(rand.nextInt(9999)).toString());
     }
 }

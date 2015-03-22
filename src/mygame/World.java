@@ -9,19 +9,15 @@ public class World {
     private static World instance = null;
 
     public static World getInstance() {
-            if (instance == null) {
-                    instance = new World();
-                    instance.init();
-            }
-            return instance;
+        if (instance == null) {
+            instance = new World();
+        }
+        return instance;
     }
 
     private World() {}
 
     private Map<Integer, GameObject> entityMap = new HashMap<Integer, GameObject>();
-
-    private void init() {
-    }
 
     public void register(Integer id, GameObject entity) {
         entityMap.put(id, entity);

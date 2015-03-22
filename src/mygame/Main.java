@@ -94,16 +94,17 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(planetGeom);
         planetGeom.move(new Vector3f(4000, -600, 0));
         
-        
+sd
         skbListener = new ShipKeyBoardListener(this);     
         
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.LightGray);
+        mat.setTexture("ColorMap", assetManager.loadTexture("Models/ship/ship.png"));
         Ship.mat = mat;
         
         testShip2 = new Ship(1, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, rootNode);
         
         Node node = new Node();
+
         
         rootNode.attachChild(node);
         
@@ -132,7 +133,6 @@ public class Main extends SimpleApplication {
         skbListener.step();
         World.getInstance().processQueue();
         meteorFactory.processQueue();
-
         this.testShip.step();
 
         

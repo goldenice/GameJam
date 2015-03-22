@@ -28,18 +28,21 @@ import ship.Ship;
  * @author normenhansen
  */
 public class Main extends SimpleApplication {
-    MeteorFactory meteorFactory;
+    public MeteorFactory meteorFactory;
     Geometry geom;
     float count;
     Ship testShip;
     CameraNode camNode;
     Node node;
     ShipKeyBoardListener skbListener;
+    Spatial player;      
     
     public static final String HOST = "localhost";
     public static final int PORT = 6969;
     public static final String[] USERNAMES = { "Button", "EBOLA.EXE", "OneManCheeseBurgerApocalypse", "BlackMesa", "Microsoft_GLa-DoS", "ZeroCool", "CrashOverride", "AcidBurn", "CerealKiller", "ThaPhreak" };
             
+
+    
     public static void main(String[] args) {
         Main app = new Main();  
         
@@ -58,11 +61,13 @@ public class Main extends SimpleApplication {
         settings.setVSync(true);
         settings.setResolution(1024, 720);
         
+      
+        
         app.start();
     }
 
     @Override
-    public void simpleInitApp() { 
+    public void simpleInitApp() {     
         meteorFactory = new MeteorFactory(this);
         try {
             Socket sock = new Socket(HOST, PORT);
@@ -102,18 +107,17 @@ public class Main extends SimpleApplication {
         
 
         
-        Box b = new Box(1, 1, 1);
-        geom = new Geometry("Box", b);
+        this.player = assetManager.loadModel("Project_Assets/ship.obj");
 
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.LightGray);
-        geom.setMaterial(mat);
+        player.setMaterial(mat);
 
         this.node = new Node();
         
         rootNode.attachChild(node);
         
-        this.node.attachChild(geom);
+        this.node.attachChild(player);
         cam.setFrustumFar(5000);
         CameraNode camNode = new CameraNode("Camnode", cam);
         
@@ -123,24 +127,26 @@ public class Main extends SimpleApplication {
         camNode.setLocalTranslation(new Vector3f(0, 0, -25));
         
         
-        camNode.lookAt(geom.getLocalTranslation(), Vector3f.UNIT_Y);
+        camNode.lookAt(player.getLocalTranslation(), Vector3f.UNIT_Y);
         camNode.setControlDir(ControlDirection.SpatialToCamera);
-        
+        meteorFactory = new MeteorFactory(this);
         meteorFactory.generateMeteors();
+
+        
     }
 
     @Override
     public void simpleUpdate(float tpf) {
         skbListener.step();
         meteorFactory.processQueue();
-        
-        if(meteorFactory.doesCollide(geom.getWorldBound())){
+        //this.testShip.step();
+        if(meteorFactory.doesCollide(player.getWorldBound())){
             System.out.println("Collison!");
         }
         node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed        
         this.testShip.setPosition(node.getLocalTranslation());
         
-        geom.setLocalRotation(Quaternion.IDENTITY);
+        player.setLocalRotation(Quaternion.IDENTITY);
     }
 
     @Override
@@ -160,12 +166,9 @@ public class Main extends SimpleApplication {
         node.rotate( x , y , z );
     }
     
-    public MeteorFactory getMeteorFactory() {
-        return meteorFactory;
-    }
-    
     public static String generateUsername() {
         Random rand = new Random();
         return USERNAMES[rand.nextInt(USERNAMES.length)] + (new Integer(rand.nextInt(9999)).toString());
     }
 }
+

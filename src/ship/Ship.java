@@ -2,6 +2,8 @@ package ship;
 
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import mygame.Main;
 import objects.GameObject;
 /**
@@ -20,8 +22,8 @@ public class Ship extends GameObject{
     private int id; 
     
     private final int DEFAULTFIREPOWER = 50;
-    private final int DEFAULTRELOADTIME = 3000;
-    private final int DEFAULTAMMO = 8;
+    private final int DEFAULTRELOADTIME = 5000;
+    private final int DEFAULTAMMO = 5;
     
     
     //Invert the4 directions the ship takes on W or S presses
@@ -30,6 +32,7 @@ public class Ship extends GameObject{
     private int health;
     
     private final float SPEED = 0.008f;
+    Weapon weapon;
     
     
     
@@ -46,7 +49,7 @@ public class Ship extends GameObject{
         
         this.app = app;
         
-        Weapon weapon = new Weapon(500, this.DEFAULTFIREPOWER, this.DEFAULTRELOADTIME, this.DEFAULTAMMO );
+        this.weapon = new Weapon(this.DEFAULTRELOADTIME, this.DEFAULTFIREPOWER, 500, this.DEFAULTAMMO );
         
     }
     
@@ -62,7 +65,7 @@ public class Ship extends GameObject{
         
         this.app = app;
         
-        Weapon weapon = new Weapon(seperation, firePower, reloadTime, ammo);
+        this.weapon = new Weapon(seperation, firePower, reloadTime, ammo);
     }
     
     //Getters for position and speed
@@ -141,17 +144,25 @@ public class Ship extends GameObject{
         app.setNodeDir(0, 0, force * 0.04f);
     }
      
-    public int shoot(){
-        Vector3f directionXYZ = app.getCamDir();
-        Vector3f positionXYZ = app.getCamLoc();
+    public void shoot(){
+        int fire = 0;
+        int nofire = 0;
+        if(this.weapon.fire()){
+            this.weapon.ammunition -= 1;
+            fire += 1;
+            Vector3f directionXYZ = this.direction;
+            Vector3f positionXYZ = this.position;
+
+            Ray ray = new Ray(directionXYZ, positionXYZ);
+
+            if (this.app.meteorFactory.doesCollide(ray)){
+                System.out.println("Lol");
+                this.app.meteorFactory.collideObject(ray).setCullHint(CullHint.Always);
+                System.out.println("Hoi");
+            }
+        } else {
+        }
         
-        Ray ray = new Ray(directionXYZ, positionXYZ);
-        
-        //TODO fill in the node for enemy ships
-        
-        
-        
-        return 0;
     }
      
     public void hit(int damage){
@@ -168,42 +179,44 @@ public class Ship extends GameObject{
         
         long lastFire;
         long reloadStart;
-        boolean reloading;
         
         public Weapon(int reloadTime, int firePower, int seperation, int ammunition){
-            this.reloading = false;
             this.seperation = seperation;
             this.firePower = firePower;
             this.reloadTime = reloadTime;
-            this.ammunition = ammunition;
+            this.ammunition = 8;
+            this.reloadStart = 0;
+            this.lastFire = 0;
         }
 
             //Use fire when firing a bullet, canFire checks reloadtime
         public boolean canFire(){
-            if ((System.currentTimeMillis() - this.reloadStart) > this.reloadTime){
-                this.reloadStart = 0;
-                return false;
-            }  
-            
-            if (reloading){
-                return false;
-            } else {            
-                if ((System.currentTimeMillis() - this.lastFire) > this.seperation){
+            long currentTime = System.currentTimeMillis();
+            if ((currentTime - this.reloadStart) > this.reloadTime){
+                
+                if(this.ammunition == 0){
+                    this.ammunition = 8;
+                }
+                
+                if ((currentTime - this.lastFire) > this.seperation){
                     return true;
-                } else {
+                }
+                else {
                     return false;
                 }
             }
+            return false;
         }
         public boolean fire(){
-            if (canFire()){
+            if (canFire() && this.ammunition > 0){
                 this.lastFire = System.currentTimeMillis();
+                return true;
+            } else if (this.ammunition == 0){
+                this.reloadStart = System.currentTimeMillis();
+                return false;
+            } else {
+                return false;
             }
-            this.ammunition -= 1;
-            if (this.ammunition <= 0){
-                this.reloading = true;
-            }
-            return this.canFire();
         }
     }
 }

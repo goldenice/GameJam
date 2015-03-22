@@ -5,10 +5,12 @@
 package objects;
 
 import com.jme3.collision.Collidable;
+import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
@@ -42,19 +44,6 @@ public class MeteorFactory {
     public void generateMeteors(){
         app.getRootNode().attachChild(node);
         return;
-        
-        /*Vector3f pos = new Vector3f(0f, 0f, 0f);
-        Sphere sphere;
-        
-        Random random = new Random();
-        for(int i = 0; i < METEOR_NUM; i++){
-            pos.x = random.nextFloat()*2*CREATION_SCALE-CREATION_SCALE;
-            pos.y = random.nextFloat()*2*CREATION_SCALE-CREATION_SCALE;
-            pos.z = random.nextFloat()*2*CREATION_SCALE-CREATION_SCALE;
-            sphere = new Sphere(5, 5, random.nextFloat()*30 + 6f);
-            meteors.add(new Meteor(0, pos, new Vector3f(random.nextFloat(), random.nextFloat(), random.nextFloat()), sphere, mat, node));
-        }
-        */
     }
     
     public synchronized void addMeteor(int id, float[] pos, float[] rot, float radius) {
@@ -76,20 +65,31 @@ public class MeteorFactory {
         this.node.collideWith(object, colRes);
         return colRes.size() != 0;        
     }
-    
+   
     public synchronized void processQueue() {
         for (Meteor meteor : queue) {
             meteor.attach();
         }
         queue = new ArrayList<Meteor>();
     }
-    
+        
+    public Geometry collideObject(Collidable object){
+        CollisionResults colRes = new CollisionResults();
+        this.node.collideWith(object, colRes);
+        for (CollisionResult res : colRes){
+            if (res.getContactPoint() != null){
+                return res.getGeometry();
+            }
+        }
+        return null;
+    }
+
     public Node getNode(){
         return node;
     }
     
     public void shuffleColors(){
-        for(Meteor meteor: meteors){
+        for (Meteor meteor: meteors){
             meteor.getMaterial().setColor("Color", ColorRGBA.randomColor());
         }
     }

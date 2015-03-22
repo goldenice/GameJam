@@ -212,7 +212,8 @@ public class Main extends SimpleApplication {
     public boolean doesCollide(Collidable object){
         CollisionResults colRes = new CollisionResults();
         this.rootNode.collideWith(object, colRes);
-        return colRes.size() > 0;        
+        System.out.println(colRes.size());
+        return colRes.size() > 250; 
     }
     
     public static String generateUsername() {

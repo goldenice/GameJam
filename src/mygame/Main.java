@@ -170,5 +170,9 @@ public class Main extends SimpleApplication {
         Random rand = new Random();
         return USERNAMES[rand.nextInt(USERNAMES.length)] + (new Integer(rand.nextInt(9999)).toString());
     }
+
+    public synchronized MeteorFactory getMeteorFactory() {
+        return meteorFactory;
+    }
 }
 

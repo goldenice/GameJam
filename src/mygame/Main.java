@@ -29,23 +29,22 @@ import ship.Ship;
  */
 public class Main extends SimpleApplication {
     public MeteorFactory meteorFactory;
-    private Geometry geom;
-    private float count;
-    private Ship testShip;
-    private CameraNode camNode;
-    private ShipKeyBoardListener skbListener;  
-    private Ship testShip2;
-    private Socket sock;
-    private NetworkManager net;
+    Geometry geom;
+    float count;
+    Ship testShip;
+    CameraNode camNode;
+    ShipKeyBoardListener skbListener;  
+    Ship testShip2;
+    public Socket sock;
+    public Thread thread;
+    public NetworkManager net;
     
-    
-    public static Main app;
     public static final String HOST = "localhost";
     public static final int PORT = 6969;
     public static final String[] USERNAMES = { "Button", "EBOLA.EXE", "OneManCheeseBurgerApocalypse", "BlackMesa", "Microsoft_GLa-DoS", "ZeroCool", "CrashOverride", "AcidBurn", "CerealKiller", "ThaPhreak" };
     
     public static void main(String[] args) {
-        app = new Main();  
+        Main app = new Main();  
         
         app.setShowSettings(true);
         AppSettings settings = new AppSettings(true);
@@ -71,7 +70,7 @@ public class Main extends SimpleApplication {
         try {
             this.sock = new Socket(HOST, PORT);
             this.net = new NetworkManager(this, sock, generateUsername());
-            Thread thread = new Thread(net);
+            this.thread = new Thread(net);
             thread.start();
         } catch (IOException e) {
             System.err.println("SOCKET FUCKUP EXCEPTION");
@@ -97,20 +96,22 @@ public class Main extends SimpleApplication {
         planetGeom.setCullHint(Spatial.CullHint.Never);
         rootNode.attachChild(planetGeom);
         planetGeom.move(new Vector3f(4000, -600, 0));
+        
+
         skbListener = new ShipKeyBoardListener(this);     
         
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setTexture("ColorMap", assetManager.loadTexture("Models/ship/ship.png"));
         Ship.mat = mat;
         
-        testShip2 = new Ship(1, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, rootNode);
+        testShip2 = new Ship(1, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, rootNode, "Henk");
         
         Node node = new Node();
 
         
         rootNode.attachChild(node);
         
-        testShip = new Ship(0, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, node);
+        testShip = new Ship(0, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, node, "Piet");
         skbListener.setShip(testShip);
 
         cam.setFrustumFar(5000);
@@ -169,7 +170,7 @@ public class Main extends SimpleApplication {
     public synchronized void attachToRootNode(Spatial thing) {
         rootNode.attachChild(thing);
     }
-    
+
     public NetworkManager getNet() {
         return net;
     }
@@ -177,5 +178,6 @@ public class Main extends SimpleApplication {
     public Socket getSock() {
         return sock;
     }
+    
     
 }

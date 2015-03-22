@@ -1,6 +1,8 @@
 package ship;
 
+import com.jme3.light.PointLight;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
@@ -29,6 +31,8 @@ public class Ship extends GameObject implements StepListener {
 
     public static Material mat;
     public static Spatial globalSpatial;
+    
+    public PointLight light;
     
     private Spatial spatial;
     private Node node;

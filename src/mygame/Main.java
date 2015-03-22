@@ -100,13 +100,10 @@ public class Main extends SimpleApplication {
         testShip = new Ship(0, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this);
         skbListener.setShip(testShip);
         
-        
-
-        
-        this.player = assetManager.loadModel("Project_Assets/ship.obj");
+        this.player = assetManager.loadModel("Models/ship/ship.j3o");
 
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.LightGray);
+        mat.setTexture("ColorMap", assetManager.loadTexture("Models/ship/ship.png"));
         player.setMaterial(mat);
 
         this.node = new Node();

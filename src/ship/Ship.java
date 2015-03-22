@@ -126,10 +126,19 @@ public class Ship extends GameObject implements StepListener {
      */
     public void step(){
         
+        if (delta_pos != Vector3f.NAN) {
+            node.move(delta_pos);
+            delta_pos = Vector3f.NAN;
+        }
+        if (delta_dir != Vector3f.NAN) {
+            app.setNodeDir(node, delta_dir.x, delta_dir.y, delta_dir.z);
+            delta_dir = Vector3f.NAN;
+        }
+        
         if(this.app.doesCollide(this.getSpatial().getWorldBound())){
             System.out.println("Collison!");
         }
-        node.move(this.app.getCamera().getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed        
+        node.move(this.app.getCamera().getDirection().normalizeLocal().mult(new Vector3f(1f, 1f, 1f))); // 0.1 = speed        
         this.setPosition(node.getLocalTranslation());
         this.direction = this.app.getCamDir();
         this.spatial.setLocalRotation(Quaternion.IDENTITY);

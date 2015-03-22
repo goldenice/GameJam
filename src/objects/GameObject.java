@@ -16,6 +16,8 @@ public abstract class GameObject {
     protected int id;
     protected Vector3f position;
     protected Vector3f direction;
+    protected Vector3f delta_pos;
+    protected Vector3f delta_dir;
     
     public GameObject(int id){
         this(id, new Vector3f(0, 0, 0), new Vector3f(0, 0, 0));
@@ -36,6 +38,7 @@ public abstract class GameObject {
     }
     
     public void setDirection(Vector3f dir) {
+        this.delta_dir = dir;
         this.direction = dir;
     }
     
@@ -44,6 +47,7 @@ public abstract class GameObject {
     }
     
     public void setPosition(Vector3f position){
+        this.delta_pos = getPosition().subtract(position);
         this.position = position;
     }
     

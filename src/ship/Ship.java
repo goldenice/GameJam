@@ -56,7 +56,7 @@ public class Ship extends GameObject{
         this.angles = new float[]{0, 0, 0};
         this.health = 100;        
         this.app = app;        
-        this.weapon = new Weapon(seperation, firePower, reloadTime, ammo);
+        this.weapon = new Weapon(8, 4000, 1000);
         if(globalSpatial == null){
             globalSpatial = app.getAssetManager().loadModel("Models/ship/ship.j3o");
             globalSpatial.scale(5);
@@ -156,11 +156,7 @@ public class Ship extends GameObject{
     }
          
     public void shoot(){
-        int fire = 0;
-        int nofire = 0;
         if(this.weapon.fire()){
-            this.weapon.ammunition -= 1;
-            fire += 1;
             Vector3f directionXYZ = this.direction;
             Vector3f positionXYZ = this.position;
 
@@ -181,78 +177,47 @@ public class Ship extends GameObject{
      }     
      
     //Weapon carries the reloadtime and damage of the weapon this ship is carrying, enabling multiple types of ship
-    public class Weapon{
-        
-        int seperation;
-        int firePower;
-        int reloadTime;
+    public class Weapon {
         int ammunition;
+        boolean reloading;
+        boolean firing;
+        
+        int cooldown;
+        int reload;
         
         long lastFire;
-        long reloadStart;
+        long lastReload;
         
-        boolean reloading;
-        boolean reloaded;
-        
-        public Weapon(int reloadTime, int firePower, int seperation, int ammunition){
-            this.seperation = seperation;
-            this.firePower = firePower;
-            this.reloadTime = reloadTime;
+        public Weapon(int ammunition, int reload, int cooldown) {
+            this.cooldown = cooldown;
+            this.reload = reload;
             this.ammunition = ammunition;
-            this.reloadStart = 0;
-            this.lastFire = 0;
             this.reloading = false;
-            this.reloaded = false;
-            this.reloadTime = 4;
-        }
-
-            //Use fire when firing a bullet, canFire checks reloadtime
-        /*public boolean canFire(){
-            long currentTime = System.currentTimeMillis();
-            if ((currentTime - this.reloadStart) > this.reloadTime){
-                
-                if(this.ammunition == 0){
-                    this.ammunition = 8;
-                }
-                
-                if ((currentTime - this.lastFire) > this.seperation){
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-            return false;
-        }
-        */
-        public void reload(){
-            if(this.reloading){
-                
-                if ((System.currentTimeMillis() - this.reloadStart) > reloadStart){
-                    this.reloaded = true;
-                    this.reloading = false;
-                    System.out.println("Gerben");
-                } 
-            }
-            if (this.reloaded){
-                this.ammunition = 8;
-                this.reloaded = false;
-            }
+            this.firing = false;
         }
         
         public boolean fire(){
-            if (this.ammunition > 0){
-                this.lastFire = System.currentTimeMillis();
-                this.reload();
+            long currentTime = System.currentTimeMillis();
+            if (!reloading && !firing && ammunition > 0) {
+                lastFire = currentTime;
+                firing = true;
+                --ammunition;
                 return true;
-            } else if (this.ammunition == 0){
-                this.reload();
-                this.reloadStart = System.currentTimeMillis();
-                this.reloading = true;
-                System.out.println("Hoi");
-                return false;
-            } else {
-                return false;
+            } else if (!reloading && ammunition == 0) {
+                lastReload = currentTime;
+                reloading = true;
+            }
+            return false;
+        }
+        
+        public void tick() {
+            long currentTime = System.currentTimeMillis();
+            if (reloading && currentTime - lastReload > reload) {
+                reloading = false;
+                ammunition = 8;
+            }
+            if (firing && currentTime - lastFire > cooldown) {
+                firing = false;
             }
         }
         

@@ -1,6 +1,7 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
@@ -38,6 +39,8 @@ public class Main extends SimpleApplication {
     private Socket sock;
     private Thread thread;
     private NetworkManager net;
+    
+    private BitmapText hudText;
     
     public static Main app;
     public static final String HOST = "localhost";
@@ -130,6 +133,12 @@ public class Main extends SimpleApplication {
         meteorFactory.generateMeteors();
 
         
+        this.hudText = new BitmapText(guiFont, false);
+        hudText.setSize(guiFont.getCharSet().getRenderedSize()); 
+        hudText.setColor(ColorRGBA.Blue);
+        hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8");
+        hudText.setLocalTranslation(300, hudText.getLineHeight(), 0);
+        guiNode.attachChild(hudText);
     }
 
     @Override
@@ -139,7 +148,8 @@ public class Main extends SimpleApplication {
         meteorFactory.processQueue();
         this.testShip.step();
 
-        
+        this.testShip.getWep().reload();
+        this.hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8");
     }
 
     @Override

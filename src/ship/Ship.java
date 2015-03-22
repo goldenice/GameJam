@@ -34,7 +34,7 @@ public class Ship extends GameObject{
     
     private static final int DEFAULTFIREPOWER = 50;
     private static final int DEFAULTRELOADTIME = 5000;
-    private static final int DEFAULTAMMO = 5;
+    private static final int DEFAULTAMMO = 8;
     
   
     
@@ -67,6 +67,10 @@ public class Ship extends GameObject{
         this.node = node;
         
         
+    }
+    
+    public Weapon getWep(){
+        return this.weapon;
     }
     
     //Getters for position and speed
@@ -187,17 +191,23 @@ public class Ship extends GameObject{
         long lastFire;
         long reloadStart;
         
+        boolean reloading;
+        boolean reloaded;
+        
         public Weapon(int reloadTime, int firePower, int seperation, int ammunition){
             this.seperation = seperation;
             this.firePower = firePower;
             this.reloadTime = reloadTime;
-            this.ammunition = 8;
+            this.ammunition = ammunition;
             this.reloadStart = 0;
             this.lastFire = 0;
+            this.reloading = false;
+            this.reloaded = false;
+            this.reloadTime = 4;
         }
 
             //Use fire when firing a bullet, canFire checks reloadtime
-        public boolean canFire(){
+        /*public boolean canFire(){
             long currentTime = System.currentTimeMillis();
             if ((currentTime - this.reloadStart) > this.reloadTime){
                 
@@ -214,16 +224,40 @@ public class Ship extends GameObject{
             }
             return false;
         }
+        */
+        public void reload(){
+            if(this.reloading){
+                
+                if ((System.currentTimeMillis() - this.reloadStart) > reloadStart){
+                    this.reloaded = true;
+                    this.reloading = false;
+                    System.out.println("Gerben");
+                } 
+            }
+            if (this.reloaded){
+                this.ammunition = 8;
+                this.reloaded = false;
+            }
+        }
+        
         public boolean fire(){
-            if (canFire() && this.ammunition > 0){
+            if (this.ammunition > 0){
                 this.lastFire = System.currentTimeMillis();
+                this.reload();
                 return true;
             } else if (this.ammunition == 0){
+                this.reload();
                 this.reloadStart = System.currentTimeMillis();
+                this.reloading = true;
+                System.out.println("Hoi");
                 return false;
             } else {
                 return false;
             }
+        }
+        
+        public int getAmmo(){
+            return this.ammunition;
         }
     }
 }

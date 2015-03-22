@@ -93,8 +93,6 @@ public class Main extends SimpleApplication {
         planetGeom.setCullHint(Spatial.CullHint.Never);
         rootNode.attachChild(planetGeom);
         planetGeom.move(new Vector3f(4000, -600, 0));
-        
-sd
         skbListener = new ShipKeyBoardListener(this);     
         
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");

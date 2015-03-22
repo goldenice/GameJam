@@ -35,6 +35,9 @@ public class Main extends SimpleApplication {
     CameraNode camNode;
     ShipKeyBoardListener skbListener;  
     Ship testShip2;
+    public Socket sock;
+    public Thread thread;
+    public NetworkManager net;
     
     public static final String HOST = "localhost";
     public static final int PORT = 6969;
@@ -65,9 +68,9 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {     
         meteorFactory = new MeteorFactory(this);
         try {
-            Socket sock = new Socket(HOST, PORT);
-            NetworkManager net = new NetworkManager(this, sock, generateUsername());
-            Thread thread = new Thread(net);
+            this.sock = new Socket(HOST, PORT);
+            this.net = new NetworkManager(this, sock, generateUsername());
+            this.thread = new Thread(net);
             thread.start();
         } catch (IOException e) {
             System.err.println("SOCKET FUCKUP EXCEPTION");

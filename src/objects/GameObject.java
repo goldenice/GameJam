@@ -47,7 +47,7 @@ public abstract class GameObject {
     }
     
     public void setPosition(Vector3f position){
-        this.delta_pos = getPosition().subtract(position);
+        this.delta_pos = position.subtract(position);
         this.position = position;
     }
     

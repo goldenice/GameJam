@@ -29,19 +29,21 @@ import ship.Ship;
  */
 public class Main extends SimpleApplication {
     public MeteorFactory meteorFactory;
-    Geometry geom;
-    float count;
-    Ship testShip;
-    CameraNode camNode;
-    ShipKeyBoardListener skbListener;  
-    Ship testShip2;
+    private Geometry geom;
+    private float count;
+    private Ship testShip;
+    private CameraNode camNode;
+    private ShipKeyBoardListener skbListener;  
+    private Ship testShip2;
     
+    
+    public static Main app;
     public static final String HOST = "localhost";
     public static final int PORT = 6969;
     public static final String[] USERNAMES = { "Button", "EBOLA.EXE", "OneManCheeseBurgerApocalypse", "BlackMesa", "Microsoft_GLa-DoS", "ZeroCool", "CrashOverride", "AcidBurn", "CerealKiller", "ThaPhreak" };
     
     public static void main(String[] args) {
-        Main app = new Main();  
+        app = new Main();  
         
         app.setShowSettings(true);
         AppSettings settings = new AppSettings(true);
@@ -165,6 +167,6 @@ public class Main extends SimpleApplication {
     public synchronized void attachToRootNode(Spatial thing) {
         rootNode.attachChild(thing);
     }
-
+    
 }
 

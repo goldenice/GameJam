@@ -30,6 +30,7 @@ public class MeteorFactory {
     public static final int METEOR_NUM = 5000;
     public static final float CREATION_SCALE = 3000;
     public Material mat;
+    private int count = 0;
     
     
     public MeteorFactory(Main app){
@@ -38,7 +39,7 @@ public class MeteorFactory {
         node = new Node();
         
         mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", this.app.getAssetManager().loadTexture("Textures/meteor.png"));
+        mat.setTexture("ColorMap", this.app.getAssetManager().loadTexture("Textures/meteor3.png"));
     }
     
     public void generateMeteors(){

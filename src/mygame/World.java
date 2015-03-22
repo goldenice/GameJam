@@ -1,5 +1,7 @@
 package mygame;
 
+import com.jme3.scene.Geometry;
+import com.jme3.terrain.GeoMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +32,7 @@ public class World {
         ArrayList<Integer> delete = new ArrayList<Integer>();
         for (Integer qid : queue.keySet()) {
             entityMap.put(qid, queue.get(qid));
-            // TODO: attach to rootnode here
+            Main.app.attachToRootNode(queue.get(qid).getSpatial());
             delete.add(qid);
             if (delete.size() > FRAME_OBJECT_CAP) break;
         }

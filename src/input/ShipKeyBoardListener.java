@@ -39,6 +39,7 @@ public class ShipKeyBoardListener implements ActionListener{
        app.getInputManager().addMapping("rollLeft", new KeyTrigger(KeyInput.KEY_A));
        app.getInputManager().addMapping("rollRight", new KeyTrigger(KeyInput.KEY_D));
        app.getInputManager().addMapping("shoot", new KeyTrigger(KeyInput.KEY_SPACE));
+       app.getInputManager().addMapping("exit", new KeyTrigger(KeyInput.KEY_ESCAPE));
        app.getInputManager().addListener(this, new String[]{"tiltForward", "tiltBackward", "rollLeft", "rollRight", "shoot"});
    }
     
@@ -60,6 +61,8 @@ public class ShipKeyBoardListener implements ActionListener{
             this.rollLeft = isPressed;
         } else if (name.equals("rollRight")){
             this.rollRight = isPressed;
+        } else if (name.equals("exit")){
+            System.exit(0);
         }
     }
     

@@ -84,6 +84,10 @@ public class Ship extends GameObject{
         return this.position.z;
     }
     
+    public void reduceHealth(int x){
+        this.health -= x;
+    }
+    
     public Vector3f getLoc(){
         //This is here for backwards compability
         return getPosition();
@@ -91,6 +95,10 @@ public class Ship extends GameObject{
     
     public float[] getAngles(){
         return this.angles;
+    }
+    
+    public int getHealth(){
+        return this.health;
     }
     
     

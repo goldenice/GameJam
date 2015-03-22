@@ -17,6 +17,7 @@ import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
+import com.jme3.ui.Picture;
 import input.ShipKeyBoardListener;
 import java.io.IOException;
 import java.net.Socket;
@@ -41,6 +42,8 @@ public class Main extends SimpleApplication {
     private NetworkManager net;
     
     private BitmapText hudText;
+    private Picture deathScreen;
+    
     
     public static Main app;
     public static final String HOST = "localhost";
@@ -62,7 +65,7 @@ public class Main extends SimpleApplication {
         settings.setResolution(1024, 720);
         
         app.setDisplayStatView(false);
-        app.setDisplayFps(true);
+        app.setDisplayFps(false);
         app.setSettings(settings);
         
         app.start();
@@ -133,12 +136,21 @@ public class Main extends SimpleApplication {
         meteorFactory.generateMeteors();
 
         
+        
         this.hudText = new BitmapText(guiFont, false);
         hudText.setSize(guiFont.getCharSet().getRenderedSize()); 
-        hudText.setColor(ColorRGBA.Blue);
-        hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8");
-        hudText.setLocalTranslation(300, hudText.getLineHeight(), 0);
+        hudText.setColor(ColorRGBA.White);
+        hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8" + " | Health: " + testShip.getHealth());
+        hudText.setLocalTranslation((settings.getWidth()/2) - (hudText.getLineWidth()/2), hudText.getLineHeight(), 0);
         guiNode.attachChild(hudText);
+        
+        
+        this.deathScreen = new Picture("Deathscreen");
+        this.deathScreen.setImage(this.assetManager, "Textures/Deathscreen.png", true);
+        this.deathScreen.setHeight(settings.getHeight());
+        this.deathScreen.setWidth(settings.getWidth());
+        this.deathScreen.setPosition(0,0);
+        
     }
 
     @Override
@@ -148,8 +160,14 @@ public class Main extends SimpleApplication {
         meteorFactory.processQueue();
         this.testShip.step();
 
+        if ((testShip.getX() > 3000 || testShip.getY() > 3000 || testShip.getZ() > 3000 || testShip.getX() < -3000 || testShip.getY() < -3000 || testShip.getZ() < -3000) && (testShip.getHealth() > 0)){
+            testShip.reduceHealth(1);
+        } else if(testShip.getHealth() <= 0){
+            guiNode.attachChild(this.deathScreen);
+        }
+       
         this.testShip.getWep().tick();
-        this.hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8");
+        this.hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8" + " | Health: " + testShip.getHealth());
     }
 
     @Override

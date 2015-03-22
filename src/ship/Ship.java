@@ -56,7 +56,7 @@ public class Ship extends GameObject{
         this.app = app;        
         this.weapon = new Weapon(seperation, firePower, reloadTime, ammo);
         if(globalSpatial == null){
-            globalSpatial = app.getAssetManager().loadModel("Project_Assets/ship.obj");
+            globalSpatial = app.getAssetManager().loadModel("Models/ship/ship.j3o");
             globalSpatial.scale(5);
             globalSpatial.setMaterial(mat);
         } 

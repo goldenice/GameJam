@@ -4,6 +4,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
@@ -20,6 +21,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import com.jme3.texture.Texture;
+import com.jme3.util.SkyFactory;
 import input.ShipKeyBoardListener;
 import java.io.IOException;
 import java.net.Socket;
@@ -119,6 +121,9 @@ public class Main extends SimpleApplication {
         Material ship_mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         ship_mat.setTexture("DiffuseMap", assetManager.loadTexture("Models/ship/ship.png"));
         Ship.mat = ship_mat;
+        
+        // SKY //
+        rootNode.attachChild(SkyFactory.createSky(assetManager, "Textures/skysphere.jpg", true));
         
         //// END ////
         

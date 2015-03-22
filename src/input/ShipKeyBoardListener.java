@@ -12,13 +12,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mygame.Command;
 import mygame.Main;
+import mygame.StepListener;
 import ship.Ship;
 
 /**
  *
  * @author Gerryflap
  */
-public class ShipKeyBoardListener implements ActionListener{
+public class ShipKeyBoardListener implements ActionListener, StepListener {
    private Ship ship;
    
    private int tiltForwardForce = 0;

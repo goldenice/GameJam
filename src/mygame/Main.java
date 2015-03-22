@@ -43,6 +43,8 @@ public class Main extends SimpleApplication {
     private Thread thread;
     private NetworkManager net;
     
+    private ArrayList<StepListener> steplisteners = new ArrayList<StepListeners>();
+    
     private BitmapText hudText;
     
     public static Main app;
@@ -141,6 +143,8 @@ public class Main extends SimpleApplication {
         
         testShip = new Ship(0, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, node, "Piet");
         skbListener.setShip(testShip);
+        
+        addStepListener(World.getInstance());
 
         cam.setFrustumFar(5000);
         CameraNode camNode = new CameraNode("Camnode", cam);
@@ -165,12 +169,10 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        skbListener.step();
-        World.getInstance().processQueue();
-        meteorFactory.processQueue();
-        this.testShip.step();
-
-        this.testShip.getWep().tick();
+        for (int i = 0; i < steplisteners.size(); i++) {
+            steplisteners.get(i).step();
+        }
+        
         this.hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8");
     }
 
@@ -210,6 +212,16 @@ public class Main extends SimpleApplication {
     
     public Socket getSock() {
         return sock;
+    }
+    
+    public void addStepListener(StepListener sl) {
+        steplisteners.add(sl);
+    }
+    
+    public void enableControls() {
+        addStepListener(testShip);
+        addStepListener(testShip.getWep());
+        addStepListener(skbListener);
     }
     
     

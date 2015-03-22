@@ -40,28 +40,23 @@ public class Main extends SimpleApplication {
     public static final String HOST = "localhost";
     public static final int PORT = 6969;
     public static final String[] USERNAMES = { "Button", "EBOLA.EXE", "OneManCheeseBurgerApocalypse", "BlackMesa", "Microsoft_GLa-DoS", "ZeroCool", "CrashOverride", "AcidBurn", "CerealKiller", "ThaPhreak" };
-            
-
     
     public static void main(String[] args) {
         Main app = new Main();  
         
         app.setShowSettings(true);
         AppSettings settings = new AppSettings(true);
-        settings.setTitle("Space Vector");
         
+        settings.setTitle("Space Vector");
         settings.setSettingsDialogImage("Project_Assets/breen-starships.jpg");
         
-        app.setDisplayStatView(false);
-        app.setDisplayFps(false);
-        app.setSettings(settings);
-        
         settings.setFullscreen(true);
-        
         settings.setVSync(true);
         settings.setResolution(1024, 720);
         
-      
+        app.setDisplayStatView(false);
+        app.setDisplayFps(true);
+        app.setSettings(settings);
         
         app.start();
     }
@@ -85,12 +80,12 @@ public class Main extends SimpleApplication {
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
         FogFilter fog = new FogFilter();
         fog.setFogColor(ColorRGBA.BlackNoAlpha);
-        fog.setFogDistance(1200);
-        fog.setFogDensity(1.1f);
+        fog.setFogDistance(3000);
+        fog.setFogDensity(1.5f);
         fpp.addFilter(fog);
         viewPort.addProcessor(fpp);
         
-        Sphere planetSphere= new Sphere(20,20,800);
+        Sphere planetSphere= new Sphere(32, 32, 800);
         Geometry planetGeom = new Geometry("planet", planetSphere);
         Material planetMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         planetMat.setColor("Color", ColorRGBA.Blue);
@@ -173,6 +168,10 @@ public class Main extends SimpleApplication {
 
     public synchronized MeteorFactory getMeteorFactory() {
         return meteorFactory;
+    }
+    
+    public synchronized void attachToRootNode(Spatial thing) {
+        rootNode.attachChild(thing);
     }
 }
 

@@ -19,8 +19,8 @@ public class NetworkManager implements Runnable {
 
     private Main app;
     private Socket socket;
-    private BufferedReader in;
-    private BufferedWriter out;
+    public BufferedReader in;
+    public BufferedWriter out;
     private String username;
     
     public NetworkManager(Main app, Socket socket, String username) {
@@ -76,6 +76,10 @@ public class NetworkManager implements Runnable {
         } else {
             // TODO: implement other objects
         }
+    }
+    
+    public Socket getSock(){
+        return this.socket;
     }
     
 }

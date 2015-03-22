@@ -16,8 +16,8 @@ public abstract class GameObject {
     protected int id;
     protected Vector3f position;
     protected Vector3f direction;
-    protected Vector3f delta_pos;
-    protected Vector3f delta_dir;
+    protected Vector3f delta_pos = Vector3f.NAN;
+    protected Vector3f delta_dir = Vector3f.NAN;
     
     public GameObject(int id){
         this(id, new Vector3f(0, 0, 0), new Vector3f(0, 0, 0));

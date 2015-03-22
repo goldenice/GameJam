@@ -103,6 +103,7 @@ public class NetworkManager implements Runnable {
     }
     
     public void updateLocation(String[] args) {
+        System.out.println("X:" + args[3]);
         if (Integer.parseInt(args[0]) != controlId) {
             if ( World.getInstance().getEntityById(Integer.parseInt(args[0])) != null ) {
                 World.getInstance().getEntityById(Integer.parseInt(args[0])).setPosition(new Vector3f(

@@ -24,7 +24,7 @@ import ship.Ship;
  * @author normenhansen
  */
 public class Main extends SimpleApplication {
-    MeteorFactory meteorFactory;
+    public MeteorFactory meteorFactory;
     Geometry geom;
     float count;
     Ship testShip;

@@ -1,5 +1,6 @@
 package mygame;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import objects.GameObject;
@@ -18,9 +19,24 @@ public class World {
     private World() {}
 
     private Map<Integer, GameObject> entityMap = new HashMap<Integer, GameObject>();
+    private Map<Integer, GameObject> queue = new HashMap<Integer, GameObject>();
+    private static final int FRAME_OBJECT_CAP = 100;
 
-    public void register(Integer id, GameObject entity) {
-        entityMap.put(id, entity);
+    public synchronized void register(Integer id, GameObject entity) {
+        queue.put(id, entity);
+    }
+    
+    public void processQueue() {
+        ArrayList<Integer> delete = new ArrayList<Integer>();
+        for (Integer qid : queue.keySet()) {
+            entityMap.put(qid, queue.get(qid));
+            // TODO: attach to rootnode here
+            delete.add(qid);
+            if (delete.size() > FRAME_OBJECT_CAP) break;
+        }
+        for (Integer id : delete) {
+            queue.remove(id);
+        }
     }
 
     public GameObject getEntityById(int identifier) {

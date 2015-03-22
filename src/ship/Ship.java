@@ -15,14 +15,14 @@ import objects.GameObject;
  */
 public class Ship extends GameObject{
     
-    
-    private Main app;
+    private int id; 
     
     private Vector3f speeds;
-    
     private float[] angles;
+    private int inverted;
+    private int health;
     
-    private int id; 
+    private Main app;
     
     
     public static Material mat;
@@ -35,13 +35,10 @@ public class Ship extends GameObject{
     private static final int DEFAULTRELOADTIME = 5000;
     private static final int DEFAULTAMMO = 5;
     
-    
-    //Invert the4 directions the ship takes on W or S presses
-    private int inverted;
-    
-    private int health;
+  
     
     private final float SPEED = 0.008f;
+    
     Weapon weapon;
     
     

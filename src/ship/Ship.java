@@ -23,6 +23,8 @@ public class Ship extends GameObject{
     private int health;
     
     private Main app;
+    
+    private String username;
 
     public static Material mat;
     public static Spatial globalSpatial;
@@ -42,12 +44,12 @@ public class Ship extends GameObject{
     
     
     
-    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, Main app, Node node){
-        this(id, position, direction, invert, Ship.DEFAULTRELOADTIME, Ship.DEFAULTFIREPOWER, 500, Ship.DEFAULTAMMO, app, node);
+    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, Main app, Node node, String username){
+        this(id, position, direction, invert, Ship.DEFAULTRELOADTIME, Ship.DEFAULTFIREPOWER, 500, Ship.DEFAULTAMMO, app, node, username);
 
     }
     
-    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, int seperation, int firePower, int reloadTime, int ammo, Main app, Node node){
+    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, int seperation, int firePower, int reloadTime, int ammo, Main app, Node node, String username){
         super(id, position, direction);
         this.speeds = new Vector3f(0, 0, 0);
         this.inverted = (invert) ? -1 : 1;
@@ -148,11 +150,7 @@ public class Ship extends GameObject{
     public Spatial getSpatial(){
         return this.spatial;
     }
-    
-    public boolean hasSpatial(){
-        return true;
-    }
-     
+         
     public void shoot(){
         int fire = 0;
         int nofire = 0;

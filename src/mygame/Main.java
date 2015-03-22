@@ -101,14 +101,14 @@ public class Main extends SimpleApplication {
         mat.setTexture("ColorMap", assetManager.loadTexture("Models/ship/ship.png"));
         Ship.mat = mat;
         
-        testShip2 = new Ship(1, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, rootNode);
+        testShip2 = new Ship(1, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, rootNode, "Henk");
         
         Node node = new Node();
 
         
         rootNode.attachChild(node);
         
-        testShip = new Ship(0, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, node);
+        testShip = new Ship(0, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, node, "Piet");
         skbListener.setShip(testShip);
 
         cam.setFrustumFar(5000);

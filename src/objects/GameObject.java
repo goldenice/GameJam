@@ -12,7 +12,7 @@ import com.jme3.scene.Spatial;
  *
  * @author Gerryflap
  */
-public class GameObject {
+public abstract class GameObject {
     protected int id;
     protected Vector3f position;
     protected Vector3f direction;
@@ -43,15 +43,6 @@ public class GameObject {
         this.position = position;
     }
     
-    public Spatial getSpatial(){
-        return null;
-    }
+    public abstract Spatial getSpatial();
     
-    public Geometry getGeometry(){
-        return null;
-    }
-    
-    public boolean hasSpatial(){
-        return false;
-    }
 }

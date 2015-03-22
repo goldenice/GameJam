@@ -1,7 +1,10 @@
 package ship;
 
+import com.jme3.material.Material;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import mygame.Main;
@@ -21,9 +24,16 @@ public class Ship extends GameObject{
     
     private int id; 
     
-    private final int DEFAULTFIREPOWER = 50;
-    private final int DEFAULTRELOADTIME = 5000;
-    private final int DEFAULTAMMO = 5;
+    
+    public static Material mat;
+    public static Spatial globalSpatial;
+    
+    private Spatial spatial;
+    private Node node;
+    
+    private static final int DEFAULTFIREPOWER = 50;
+    private static final int DEFAULTRELOADTIME = 5000;
+    private static final int DEFAULTAMMO = 5;
     
     
     //Invert the4 directions the ship takes on W or S presses
@@ -36,7 +46,11 @@ public class Ship extends GameObject{
     
     
     
-    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, Main app){
+    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, Main app, Node node){
+        this(id, position, direction, invert, Ship.DEFAULTRELOADTIME, Ship.DEFAULTFIREPOWER, 500, Ship.DEFAULTAMMO, app, node);
+    }
+    
+    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, int seperation, int firePower, int reloadTime, int ammo, Main app, Node node){
         super(id, position, direction);
         this.speeds = new Vector3f(0, 0, 0);
         if (invert) {
@@ -44,28 +58,20 @@ public class Ship extends GameObject{
         } else {
             this.inverted = 1;
         }
-        this.angles = new float[]{0,0,0};
-        this.health = 100;
-        
-        this.app = app;
-        
-        this.weapon = new Weapon(this.DEFAULTRELOADTIME, this.DEFAULTFIREPOWER, 500, this.DEFAULTAMMO );
-        
-    }
-    
-    public Ship(int id, Vector3f position, Vector3f direction, boolean invert, int seperation, int firePower, int reloadTime, int ammo, Main app){
-        super(id, position, direction);
-        if (invert) {
-            this.inverted = -1;
-        } else {
-            this.inverted = 1;
-        }
         this.angles = new float[]{0, 0, 0};
-        this.health = 100;
-        
-        this.app = app;
-        
+        this.health = 100;        
+        this.app = app;        
         this.weapon = new Weapon(seperation, firePower, reloadTime, ammo);
+        if(globalSpatial == null){
+            globalSpatial = app.getAssetManager().loadModel("Project_Assets/ship.obj");
+            globalSpatial.scale(5);
+            globalSpatial.setMaterial(mat);
+        } 
+        this.spatial = globalSpatial.clone();
+        node.attachChild(spatial);
+        this.node = node;
+        
+        
     }
     
     //Getters for position and speed
@@ -94,12 +100,14 @@ public class Ship extends GameObject{
     }
     
     public void step(){
-
-        this.speeds.x = (float) (SPEED * (Math.cos(this.angles[2]) * -Math.sin(this.angles[1])));
-        this.speeds.y = (float) (SPEED * (Math.cos(this.angles[0]) * Math.sin(this.angles[2])));
-        this.speeds.z = (float) (SPEED * (Math.cos(this.angles[1]) * Math.sin(this.angles[0])));
+        if(this.app.meteorFactory.doesCollide(spatial.getWorldBound())){
+            System.out.println("Collison!");
+        }
+        node.move(this.app.getCamera().getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed        
+        this.setPosition(node.getLocalTranslation());
         
-        this.position.add(this.speeds);
+        this.spatial.setLocalRotation(Quaternion.IDENTITY);
+        
         //System.out.println(String.format("x: %s, y: %s, z: %s", angles[0], angles[1], angles[2]));
         //System.out.println(String.format("x: %s, y: %s, z: %s", Math.sin(this.angles[2]) * Math.cos(this.angles[1]) , Math.sin(this.angles[0]) * Math.cos(this.angles[2]), Math.sin(this.angles[1]) * Math.cos(this.angles[0])));
 
@@ -129,19 +137,27 @@ public class Ship extends GameObject{
     }
     
     public void wPressed(float force){
-        app.setNodeDir(force * inverted * 0.03f, 0, 0);
+        app.setNodeDir(node, force * inverted * 0.03f, 0, 0);
     }
     
     public void sPressed(float force){
-        app.setNodeDir(force * -1 * (inverted * 0.03f), 0, 0);        
+        app.setNodeDir(node, force * -1 * (inverted * 0.03f), 0, 0);        
     }
     
     public void aPressed(float force) {
-        app.setNodeDir(0, 0, force * -1 * 0.04f);
+        app.setNodeDir(node, 0, 0, force * -1 * 0.04f);
     }
     
     public void dPressed(float force) {
-        app.setNodeDir(0, 0, force * 0.04f);
+        app.setNodeDir(node, 0, 0, force * 0.04f);
+    }
+    
+    public Spatial getSpatial(){
+        return this.spatial;
+    }
+    
+    public boolean hasSpatial(){
+        return true;
     }
      
     public void shoot(){

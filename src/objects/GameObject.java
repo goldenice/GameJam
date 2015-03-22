@@ -5,6 +5,8 @@
 package objects;
 
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
 
 /**
  *
@@ -39,5 +41,17 @@ public class GameObject {
     
     public void setPosition(Vector3f position){
         this.position = position;
+    }
+    
+    public Spatial getSpatial(){
+        return null;
+    }
+    
+    public Geometry getGeometry(){
+        return null;
+    }
+    
+    public boolean hasSpatial(){
+        return false;
     }
 }

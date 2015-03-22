@@ -1,6 +1,8 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.collision.Collidable;
+import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -50,7 +52,6 @@ public class Main extends SimpleApplication {
     
     private BitmapText hudText;
     private Picture deathScreen;
-    
     
     public static Main app;
     public static final String HOST = "localhost";
@@ -184,18 +185,11 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
+        this.hudText.setText("Ammunition: " + mainship.getWep().getAmmo() + "/8" + " | Health: " + mainship.getHealth());
         for (int i = 0; i < steplisteners.size(); i++) {
             steplisteners.get(i).step();
         }
         
-        if ((mainship.getX() > 3000 || mainship.getY() > 3000 || mainship.getZ() > 3000 
-                || mainship.getX() < -3000 || mainship.getY() < -3000 || mainship.getZ() < -3000) && (mainship.getHealth() > 0)){
-            mainship.reduceHealth(1);
-        } else if(mainship.getHealth() <= 0){
-            guiNode.attachChild(this.deathScreen);
-        }
-        
-        this.hudText.setText("Ammunition: " + mainship.getWep().getAmmo() + "/8");
     }
 
     @Override
@@ -213,6 +207,13 @@ public class Main extends SimpleApplication {
     
     public void setNodeDir(Node node, float x, float y, float z){
         node.rotate( x , y , z );
+    }
+    
+    public boolean doesCollide(Collidable object){
+        CollisionResults colRes = new CollisionResults();
+        this.rootNode.collideWith(object, colRes);
+        System.out.println(colRes.size());
+        return colRes.size() > 250; 
     }
     
     public static String generateUsername() {
@@ -236,6 +237,9 @@ public class Main extends SimpleApplication {
         return sock;
     }
     
+    public Picture getDeathScreen(){
+        return this.deathScreen;
+    }
     public void addStepListener(StepListener sl) {
         steplisteners.add(sl);
     }
@@ -251,4 +255,7 @@ public class Main extends SimpleApplication {
     }
     
     
+    public Node getGui(){
+        return this.guiNode;
+    }
 }

@@ -4,12 +4,15 @@
  */
 package mygame;
 
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import ship.Ship;
 
 /**
  *
@@ -50,6 +53,8 @@ public class NetworkManager implements Runnable {
                             updateObject(args);
                         } else if (cmd.getCommandType() == Command.CommandType.CONTROL) {
                             controlId = Integer.parseInt(cmd.getArguments()[0]);
+                        } else if (cmd.getCommandType() == Command.CommandType.UPDATE) {
+                            updateLocation(cmd.getArguments());
                         } else {
                             // TODO: implement other commands
                         }
@@ -86,11 +91,28 @@ public class NetworkManager implements Runnable {
                 app.getShip().setId(controlId);
                 World.getInstance().resetId(-5, controlId);
             } else {
-                // Create ship and add it to the world
+                Ship newship = new Ship(Integer.parseInt(args[0]), 
+                        new Vector3f(Float.parseFloat(args[2]), Float.parseFloat(args[3]), Float.parseFloat(args[4])), 
+                        new Vector3f(Float.parseFloat(args[5]), Float.parseFloat(args[6]), Float.parseFloat(args[7])), 
+                        true, app, new Node(), "");
+                World.getInstance().register(Integer.parseInt(args[0]), newship);
             }
         } else {
             // TODO: implement other objects
         }
+    }
+    
+    public void updateLocation(String[] args) {
+        World.getInstance().getEntityById(Integer.parseInt(args[0])).setPosition(new Vector3f(
+                    Float.parseFloat(args[2]),
+                    Float.parseFloat(args[3]),
+                    Float.parseFloat(args[4])
+                ));
+        World.getInstance().getEntityById(Integer.parseInt(args[0])).setDirection(new Vector3f(
+                    Float.parseFloat(args[5]),
+                    Float.parseFloat(args[6]),
+                    Float.parseFloat(args[7])
+                ));
     }
     
     public Socket getSock(){

@@ -115,11 +115,12 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         skbListener.step();
-        this.testShip.step();
-        if(meteorFactory.doesCollide(this.player.getWorldBound())){
-            System.out.println("Collision");
+        //this.testShip.step();
+        if(meteorFactory.doesCollide(geom.getWorldBound())){
+            System.out.println("Collison!");
         }
-        node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed
+        node.move(this.cam.getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed        
+        this.testShip.setPosition(node.getLocalTranslation());
         
         //geom.setLocalRotation(Quaternion.IDENTITY);
     }

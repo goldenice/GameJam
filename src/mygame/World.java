@@ -28,7 +28,7 @@ public class World {
         queue.put(id, entity);
     }
     
-    public void processQueue() {
+    public synchronized void processQueue() {
         ArrayList<Integer> delete = new ArrayList<Integer>();
         for (Integer qid : queue.keySet()) {
             entityMap.put(qid, queue.get(qid));

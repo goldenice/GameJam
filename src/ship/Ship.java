@@ -1,6 +1,8 @@
 package ship;
 
+import com.jme3.light.PointLight;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
@@ -10,12 +12,13 @@ import com.jme3.scene.Spatial.CullHint;
 import java.io.IOException;
 import mygame.Command;
 import mygame.Main;
+import mygame.StepListener;
 import objects.GameObject;
 /**
  * 
  * @author Destion
  */
-public class Ship extends GameObject{
+public class Ship extends GameObject implements StepListener {
     
     private int id; 
     
@@ -30,6 +33,8 @@ public class Ship extends GameObject{
 
     public static Material mat;
     public static Spatial globalSpatial;
+    
+    public PointLight light;
     
     private Spatial spatial;
     private Node node;
@@ -110,7 +115,11 @@ public class Ship extends GameObject{
         return this.SPEED;
     }
     
-    public void step() throws IOException{
+    /**
+     *
+     * @throws IOException
+     */
+    public void step(){
         if(this.app.doesCollide(this.getSpatial().getWorldBound())){
             System.out.println("Collison!");
         }
@@ -118,15 +127,17 @@ public class Ship extends GameObject{
         this.setPosition(node.getLocalTranslation());
         
         this.spatial.setLocalRotation(Quaternion.IDENTITY);
-        
         if ((this.getX() > 3000 || this.getY() > 3000 || this.getZ() > 3000 || this.getX() < -3000 || this.getY() < -3000 || this.getZ() < -3000) && (this.getHealth() > 0)){
             this.reduceHealth(1);
         } else if(this.getHealth() <= 0){
             app.getGui().attachChild(app.getDeathScreen());
             this.dead = true;
             this.deathtime = System.currentTimeMillis();
-            
-            this.app.getNet().send(new Command(Command.CommandType.KILL).addArgument(Integer.toString(this.id)));
+            try{
+                this.app.getNet().send(new Command(Command.CommandType.KILL).addArgument(Integer.toString(this.id)));
+            } catch (IOException e){
+                
+            }
         }
         
         
@@ -180,7 +191,7 @@ public class Ship extends GameObject{
     }
     
     public Spatial getSpatial(){
-        return this.spatial;
+        return this.node;
     }
          
     public void shoot(){
@@ -205,7 +216,7 @@ public class Ship extends GameObject{
      }     
      
     //Weapon carries the reloadtime and damage of the weapon this ship is carrying, enabling multiple types of ship
-    public class Weapon {
+    public class Weapon implements StepListener {
         int ammunition;
         boolean reloading;
         boolean firing;
@@ -238,7 +249,7 @@ public class Ship extends GameObject{
             return false;
         }
         
-        public void tick() {
+        public void step() {
             long currentTime = System.currentTimeMillis();
             if (reloading && currentTime - lastReload > reload) {
                 reloading = false;

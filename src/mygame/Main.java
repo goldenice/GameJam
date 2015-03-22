@@ -6,6 +6,7 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
@@ -23,9 +24,11 @@ import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 import com.jme3.texture.Texture;
+import com.jme3.util.SkyFactory;
 import input.ShipKeyBoardListener;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Random;
 import objects.MeteorFactory;
 import ship.Ship;
@@ -38,13 +41,14 @@ public class Main extends SimpleApplication {
     public MeteorFactory meteorFactory;
     Geometry geom;
     float count;
-    Ship testShip;
+    Ship mainship;
     CameraNode camNode;
     ShipKeyBoardListener skbListener;  
-    Ship testShip2;
     private Socket sock;
     private Thread thread;
     private NetworkManager net;
+    
+    private ArrayList<StepListener> steplisteners = new ArrayList<StepListener>();
     
     private BitmapText hudText;
     private Picture deathScreen;
@@ -124,6 +128,9 @@ public class Main extends SimpleApplication {
         ship_mat.setTexture("DiffuseMap", assetManager.loadTexture("Models/ship/ship.png"));
         Ship.mat = ship_mat;
         
+        // SKY //
+        rootNode.attachChild(SkyFactory.createSky(assetManager, "Textures/skysphere.jpg", true));
+        
         //// END ////
         
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
@@ -136,15 +143,13 @@ public class Main extends SimpleApplication {
 
         skbListener = new ShipKeyBoardListener(this);    
         
-        testShip2 = new Ship(1, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, rootNode, "Henk");
-        
         Node node = new Node();
-
         
-        rootNode.attachChild(node);
+        mainship = new Ship(-5, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, node, "Piet");
+        skbListener.setShip(mainship);
+        World.getInstance().register(-5, mainship);
         
-        testShip = new Ship(0, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, node, "Piet");
-        skbListener.setShip(testShip);
+        addStepListener(World.getInstance());
 
         cam.setFrustumFar(5000);
         CameraNode camNode = new CameraNode("Camnode", cam);
@@ -153,7 +158,7 @@ public class Main extends SimpleApplication {
       
         camNode.setLocalTranslation(new Vector3f(0, 50, -250));
         
-        camNode.lookAt(testShip.getLoc(), Vector3f.UNIT_Y);
+        camNode.lookAt(mainship.getLoc(), Vector3f.UNIT_Y);
         camNode.setControlDir(ControlDirection.SpatialToCamera);
         meteorFactory = new MeteorFactory(this);
         meteorFactory.generateMeteors();
@@ -163,7 +168,7 @@ public class Main extends SimpleApplication {
         this.hudText = new BitmapText(guiFont, false);
         hudText.setSize(guiFont.getCharSet().getRenderedSize()); 
         hudText.setColor(ColorRGBA.White);
-        hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8" + " | Health: " + testShip.getHealth());
+        hudText.setText("Ammunition: " + mainship.getWep().getAmmo() + "/8" + " | Health: " + mainship.getHealth());
         hudText.setLocalTranslation((settings.getWidth()/2) - (hudText.getLineWidth()/2), hudText.getLineHeight(), 0);
         guiNode.attachChild(hudText);
         
@@ -178,13 +183,11 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        skbListener.step();
-        World.getInstance().processQueue();
-        meteorFactory.processQueue();
-        this.testShip.step();
-
-        this.testShip.getWep().tick();
-        this.hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8" + " | Health: " + testShip.getHealth());
+        this.hudText.setText("Ammunition: " + mainship.getWep().getAmmo() + "/8" + " | Health: " + mainship.getHealth());
+        for (int i = 0; i < steplisteners.size(); i++) {
+            steplisteners.get(i).step();
+        }
+        
     }
 
     @Override
@@ -234,6 +237,20 @@ public class Main extends SimpleApplication {
     public Picture getDeathScreen(){
         return this.deathScreen;
     }
+    public void addStepListener(StepListener sl) {
+        steplisteners.add(sl);
+    }
+    
+    public void enableControls() {
+        addStepListener(mainship);
+        addStepListener(mainship.getWep());
+        addStepListener(skbListener);
+    }
+    
+    public Ship getShip() {
+        return mainship;
+    }
+    
     
     public Node getGui(){
         return this.guiNode;

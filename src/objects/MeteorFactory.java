@@ -73,13 +73,6 @@ public class MeteorFactory {
         return this.meteors;
     }
    
-    public synchronized void processQueue() {
-        /*for (Meteor meteor : queue) {
-            meteor.attach();
-        }
-        queue = new ArrayList<Meteor>();*/
-    }
-        
     public Geometry collideObject(Collidable object){
         CollisionResults colRes = new CollisionResults();
         this.node.collideWith(object, colRes);

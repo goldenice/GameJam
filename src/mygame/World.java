@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import objects.GameObject;
 
-public class World {
+public class World implements StepListener {
 
     private static World instance = null;
 
@@ -28,7 +28,7 @@ public class World {
         queue.put(id, entity);
     }
     
-    public synchronized void processQueue() {
+    public synchronized void step() {
         ArrayList<Integer> delete = new ArrayList<Integer>();
         for (Integer qid : queue.keySet()) {
             entityMap.put(qid, queue.get(qid));
@@ -47,6 +47,11 @@ public class World {
 
     public float[] getSpawnLocation() {
         return new float[3];
+    }
+    
+    public synchronized void resetId(int oldid, int newid) {
+        queue.put(newid, entityMap.get(oldid));
+        entityMap.remove(oldid);
     }
 
     public Map<Integer, GameObject> getEntityMap() {

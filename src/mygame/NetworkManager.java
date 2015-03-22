@@ -22,6 +22,7 @@ public class NetworkManager implements Runnable {
     public BufferedReader in;
     public BufferedWriter out;
     private String username;
+    private int controlId;
     
     public NetworkManager(Main app, Socket socket, String username) {
         this.username = username;
@@ -47,6 +48,8 @@ public class NetworkManager implements Runnable {
                         if (cmd.getCommandType() == Command.CommandType.OBJECT) {
                             String[] args = cmd.getArguments();
                             updateObject(args);
+                        } else if (cmd.getCommandType() == Command.CommandType.CONTROL) {
+                            controlId = Integer.parseInt(cmd.getArguments()[0]);
                         } else {
                             // TODO: implement other commands
                         }
@@ -67,12 +70,20 @@ public class NetworkManager implements Runnable {
     }
     
     public void updateObject(String[] args) {
+        int id = Integer.parseInt(args[0]);
         if ("Meteor".equals(args[1])) {
-            int id = Integer.parseInt(args[0]);
             float[] coords = { Float.parseFloat(args[2]), Float.parseFloat(args[3]), Float.parseFloat(args[4]) };
             float[] rotation = { Float.parseFloat(args[5]), Float.parseFloat(args[6]), Float.parseFloat(args[7]) };
             float radius = Float.parseFloat(args[8]);
             app.getMeteorFactory().addMeteor(id, coords, rotation, radius);
+        } else if ("Ship".equals(args[1])) {
+            if (id == controlId) {
+                app.enableControls();
+                app.getShip().setId(controlId);
+                World.getInstance().resetId(-5, controlId);
+            } else {
+                // Create ship and add it to the world
+            }
         } else {
             // TODO: implement other objects
         }

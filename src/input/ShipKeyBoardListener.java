@@ -30,6 +30,10 @@ public class ShipKeyBoardListener implements ActionListener{
    
    public ShipKeyBoardListener(Main app){
        
+       app.getInputManager().addMapping("tiltForward", new KeyTrigger(KeyInput.KEY_UP));
+       app.getInputManager().addMapping("tiltBackward", new KeyTrigger(KeyInput.KEY_DOWN));
+       app.getInputManager().addMapping("rollLeft", new KeyTrigger(KeyInput.KEY_LEFT));
+       app.getInputManager().addMapping("rollRight", new KeyTrigger(KeyInput.KEY_RIGHT));
        app.getInputManager().addMapping("tiltForward", new KeyTrigger(KeyInput.KEY_W));
        app.getInputManager().addMapping("tiltBackward", new KeyTrigger(KeyInput.KEY_S));
        app.getInputManager().addMapping("rollLeft", new KeyTrigger(KeyInput.KEY_A));

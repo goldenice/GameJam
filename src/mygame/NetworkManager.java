@@ -79,6 +79,8 @@ public class NetworkManager implements Runnable {
         } else if ("Ship".equals(args[1])) {
             if (id == controlId) {
                 app.enableControls();
+                app.getShip().setId(controlId);
+                World.getInstance().resetId(-5, controlId);
             } else {
                 // Create ship and add it to the world
             }

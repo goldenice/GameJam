@@ -48,6 +48,11 @@ public class World implements StepListener {
     public float[] getSpawnLocation() {
         return new float[3];
     }
+    
+    public synchronized void resetId(int oldid, int newid) {
+        queue.put(newid, entityMap.get(oldid));
+        entityMap.remove(oldid);
+    }
 
     public Map<Integer, GameObject> getEntityMap() {
         return entityMap;

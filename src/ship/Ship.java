@@ -161,7 +161,7 @@ public class Ship extends GameObject implements StepListener {
     }
     
     public Spatial getSpatial(){
-        return this.spatial;
+        return this.node;
     }
          
     public void shoot(){

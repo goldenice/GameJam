@@ -37,10 +37,9 @@ public class Main extends SimpleApplication {
     public MeteorFactory meteorFactory;
     Geometry geom;
     float count;
-    Ship testShip;
+    Ship mainship;
     CameraNode camNode;
     ShipKeyBoardListener skbListener;  
-    Ship testShip2;
     private Socket sock;
     private Thread thread;
     private NetworkManager net;
@@ -138,15 +137,11 @@ public class Main extends SimpleApplication {
 
         skbListener = new ShipKeyBoardListener(this);    
         
-        testShip2 = new Ship(1, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, rootNode, "Henk");
-        
         Node node = new Node();
-
         
-        rootNode.attachChild(node);
-        
-        testShip = new Ship(0, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, node, "Piet");
-        skbListener.setShip(testShip);
+        mainship = new Ship(-5, new Vector3f(0,0,0), new Vector3f(0,0,0), false, this, node, "Piet");
+        skbListener.setShip(mainship);
+        World.getInstance().register(-5, mainship);
         
         addStepListener(World.getInstance());
 
@@ -157,7 +152,7 @@ public class Main extends SimpleApplication {
       
         camNode.setLocalTranslation(new Vector3f(0, 50, -250));
         
-        camNode.lookAt(testShip.getLoc(), Vector3f.UNIT_Y);
+        camNode.lookAt(mainship.getLoc(), Vector3f.UNIT_Y);
         camNode.setControlDir(ControlDirection.SpatialToCamera);
         meteorFactory = new MeteorFactory(this);
         meteorFactory.generateMeteors();
@@ -167,7 +162,7 @@ public class Main extends SimpleApplication {
         this.hudText = new BitmapText(guiFont, false);
         hudText.setSize(guiFont.getCharSet().getRenderedSize()); 
         hudText.setColor(ColorRGBA.White);
-        hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8" + " | Health: " + testShip.getHealth());
+        hudText.setText("Ammunition: " + mainship.getWep().getAmmo() + "/8" + " | Health: " + mainship.getHealth());
         hudText.setLocalTranslation((settings.getWidth()/2) - (hudText.getLineWidth()/2), hudText.getLineHeight(), 0);
         guiNode.attachChild(hudText);
         
@@ -186,13 +181,14 @@ public class Main extends SimpleApplication {
             steplisteners.get(i).step();
         }
         
-        if ((testShip.getX() > 3000 || testShip.getY() > 3000 || testShip.getZ() > 3000 || testShip.getX() < -3000 || testShip.getY() < -3000 || testShip.getZ() < -3000) && (testShip.getHealth() > 0)){
-            testShip.reduceHealth(1);
-        } else if(testShip.getHealth() <= 0){
+        if ((mainship.getX() > 3000 || mainship.getY() > 3000 || mainship.getZ() > 3000 
+                || mainship.getX() < -3000 || mainship.getY() < -3000 || mainship.getZ() < -3000) && (mainship.getHealth() > 0)){
+            mainship.reduceHealth(1);
+        } else if(mainship.getHealth() <= 0){
             guiNode.attachChild(this.deathScreen);
         }
         
-        this.hudText.setText("Ammunition: " + testShip.getWep().getAmmo() + "/8");
+        this.hudText.setText("Ammunition: " + mainship.getWep().getAmmo() + "/8");
     }
 
     @Override
@@ -238,9 +234,13 @@ public class Main extends SimpleApplication {
     }
     
     public void enableControls() {
-        addStepListener(testShip);
-        addStepListener(testShip.getWep());
+        addStepListener(mainship);
+        addStepListener(mainship.getWep());
         addStepListener(skbListener);
+    }
+    
+    public Ship getShip() {
+        return mainship;
     }
     
     

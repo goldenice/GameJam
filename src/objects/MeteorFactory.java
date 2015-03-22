@@ -38,7 +38,7 @@ public class MeteorFactory {
         node = new Node();
         
         mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", this.app.getAssetManager().loadTexture("Textures/image_2015-03-02_14-50-11.png"));
+        mat.setTexture("ColorMap", this.app.getAssetManager().loadTexture("Textures/meteor.png"));
     }
     
     public void generateMeteors(){

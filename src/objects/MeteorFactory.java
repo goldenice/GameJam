@@ -38,9 +38,6 @@ public class MeteorFactory {
         this.app = app;
         meteors = new ArrayList<Meteor>();
         node = new Node();
-        
-        mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", this.app.getAssetManager().loadTexture("Textures/meteor3.png"));
     }
     
     public void generateMeteors(){
@@ -53,6 +50,20 @@ public class MeteorFactory {
         Vector3f posvect = new Vector3f(pos[0], pos[1], pos[2]);
         Vector3f dirvect = new Vector3f(rot[0], rot[1], rot[2]);
         Sphere sphere = new Sphere(5, 5, radius);
+        
+        
+        mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        
+        Random random = new Random();
+        int text = random.nextInt(3);
+        if(text == 0){
+            mat.setTexture("ColorMap", this.app.getAssetManager().loadTexture("Textures/meteor.png"));
+        } else if(text == 1){
+            mat.setTexture("ColorMap", this.app.getAssetManager().loadTexture("Textures/meteor2.png"));
+        } else if(text == 2){
+            mat.setTexture("ColorMap", this.app.getAssetManager().loadTexture("Textures/meteor3.png"));
+        }
+        
         Meteor meteor = new Meteor(id, posvect, dirvect, sphere, mat);
         meteors.add(meteor);
         World.getInstance().register(id, meteor);

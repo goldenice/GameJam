@@ -9,6 +9,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
+import java.io.IOException;
+import mygame.Command;
 import mygame.Main;
 import mygame.StepListener;
 import objects.GameObject;
@@ -41,7 +43,9 @@ public class Ship extends GameObject implements StepListener {
     private static final int DEFAULTRELOADTIME = 5000;
     private static final int DEFAULTAMMO = 8;
     
-  
+    private boolean dead = false;
+    private long deathtime = 0;
+    private static final long RESPAWN = 5000;
     
     private final float SPEED = 0.008f;
     
@@ -111,14 +115,36 @@ public class Ship extends GameObject implements StepListener {
         return this.SPEED;
     }
     
+    /**
+     *
+     * @throws IOException
+     */
     public void step(){
-        if(this.app.meteorFactory.doesCollide(spatial.getWorldBound())){
+        if(this.app.doesCollide(this.getSpatial().getWorldBound())){
             System.out.println("Collison!");
         }
         node.move(this.app.getCamera().getDirection().normalizeLocal().mult(new Vector3f(10f, 10f, 10f))); // 0.1 = speed        
         this.setPosition(node.getLocalTranslation());
         
         this.spatial.setLocalRotation(Quaternion.IDENTITY);
+        if ((this.getX() > 3000 || this.getY() > 3000 || this.getZ() > 3000 || this.getX() < -3000 || this.getY() < -3000 || this.getZ() < -3000) && (this.getHealth() > 0)){
+            this.reduceHealth(1);
+        } else if(this.getHealth() <= 0){
+            app.getGui().attachChild(app.getDeathScreen());
+            this.dead = true;
+            this.deathtime = System.currentTimeMillis();
+            try{
+                this.app.getNet().send(new Command(Command.CommandType.KILL).addArgument(Integer.toString(this.id)));
+            } catch (IOException e){
+                
+            }
+        }
+        
+        
+        if ((System.currentTimeMillis() - this.deathtime) > RESPAWN){
+            app.getGui().detachChild(app.getDeathScreen());
+            this.setPosition(new Vector3f(0,0,0));
+        } 
         
         //System.out.println(String.format("x: %s, y: %s, z: %s", angles[0], angles[1], angles[2]));
         //System.out.println(String.format("x: %s, y: %s, z: %s", Math.sin(this.angles[2]) * Math.cos(this.angles[1]) , Math.sin(this.angles[0]) * Math.cos(this.angles[2]), Math.sin(this.angles[1]) * Math.cos(this.angles[0])));
@@ -175,11 +201,11 @@ public class Ship extends GameObject implements StepListener {
 
             Ray ray = new Ray(directionXYZ, positionXYZ);
 
-            if (this.app.meteorFactory.doesCollide(ray)){
-                System.out.println("Lol");
-                this.app.meteorFactory.collideObject(ray).setCullHint(CullHint.Always);
-                System.out.println("Hoi");
-            }
+//            if (this.app.meteorFactory.doesCollide(ray)){
+//                System.out.println("Lol");
+//                this.app.meteorFactory.collideObject(ray).setCullHint(CullHint.Always);
+//                System.out.println("Hoi");
+//            }
         } else {
         }
         
